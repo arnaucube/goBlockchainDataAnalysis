@@ -3,12 +3,22 @@ package main
 import (
 	"log"
 
+	mgo "gopkg.in/mgo.v2"
+
 	"github.com/btcsuite/btcrpcclient"
 )
 
-func main() {
+var blockCollection *mgo.Collection
 
+func main() {
+	//read goBlockchainDataAbalysis config
 	readConfig("config.json")
+
+	//connect with mongodb
+	readMongodbConfig("./mongodbConfig.json")
+	session, err := getSession()
+	check(err)
+	blockCollection = getCollection(session, "blocks")
 
 	// create new client instance
 	client, err := btcrpcclient.New(&btcrpcclient.ConnConfig{

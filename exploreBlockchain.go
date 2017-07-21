@@ -8,26 +8,14 @@ import (
 )
 
 func explore(client *btcrpcclient.Client, blockHash string) {
+	var realBlocks int
 	for blockHash != "" {
 		//generate hash from string
 		bh, err := chainhash.NewHashFromStr(blockHash)
 		check(err)
-		fmt.Print("blockHash: ")
-		fmt.Println(bh)
 		block, err := client.GetBlockVerbose(bh)
 		check(err)
-		fmt.Print("height: ")
-		fmt.Println(block.Height)
-		fmt.Print("rawTx: ")
-		fmt.Println(block.RawTx)
-		fmt.Print("Tx: ")
-		fmt.Println(block.Tx)
-		fmt.Print("Time: ")
-		fmt.Println(block.Time)
-		fmt.Print("Confirmations: ")
-		fmt.Println(block.Confirmations)
 
-		fmt.Print("Fee: ")
 		th, err := chainhash.NewHashFromStr(block.Tx[0])
 		check(err)
 		tx, err := client.GetRawTransactionVerbose(th)
@@ -37,9 +25,6 @@ func explore(client *btcrpcclient.Client, blockHash string) {
 		for _, Vo := range tx.Vout {
 			totalFee = totalFee + Vo.Value
 		}
-		fmt.Print("totalFee: ")
-		fmt.Print(totalFee)
-		fmt.Println(" FAIR")
 
 		//for each Tx, get the Tx value
 		var totalAmount float64
@@ -49,22 +34,32 @@ func explore(client *btcrpcclient.Client, blockHash string) {
 			if k > 0 {
 				th, err := chainhash.NewHashFromStr(txHash)
 				check(err)
-				fmt.Print("tx hash: ")
-				fmt.Println(th)
 				tx, err := client.GetRawTransactionVerbose(th)
 				check(err)
 				for _, Vo := range tx.Vout {
 					totalAmount = totalAmount + Vo.Value
 				}
-				fmt.Print("totalAmount: ")
-				fmt.Print(totalAmount)
-				fmt.Println(" FAIR")
 			}
 		}
-		fmt.Println("-----")
+		if totalAmount > 0 {
+			var newBlock BlockModel
+			newBlock.Hash = block.Hash
+			newBlock.Height = block.Height
+			newBlock.Confirmations = block.Confirmations
+			newBlock.Amount = totalAmount
+			newBlock.Fee = totalFee
+			saveBlock(blockCollection, newBlock)
+			fmt.Println(newBlock.Height)
+			fmt.Println(newBlock.Amount)
+			fmt.Println(newBlock.Fee)
+			fmt.Println("-----")
+			realBlocks++
+		}
 
 		//set the next block
 		blockHash = block.NextHash
 	}
+	fmt.Print("realBlocks (blocks with Fee and Amount values): ")
+	fmt.Println(realBlocks)
 	fmt.Println("reached the end of blockchain")
 }
