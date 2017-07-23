@@ -16,7 +16,7 @@ rpcallowip=127.0.0.1
 ```
 
 execute wallet:
-./FairCoind -txindex -reindex-chainstate
+./faircoind -txindex -reindex-chainstate
 
 ### Configure
 

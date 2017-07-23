@@ -14,5 +14,6 @@
 .glide/
 
 
-*.conf
-*.json
+/*.conf
+/*.json
+web

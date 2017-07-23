@@ -63,3 +63,13 @@ func saveBlock(c *mgo.Collection, block BlockModel) {
 	}
 
 }
+func saveNode(c *mgo.Collection, block BlockModel) {
+	var node NodeModel
+	node.Id = block.Hash
+	node.Label = block.Hash
+	node.Title = block.Hash
+	node.Value = 1
+	node.Shape = "dot"
+}
+func saveEdge(c *mgo.Collection, block BlockModel) {
+}

@@ -9,6 +9,8 @@ import (
 )
 
 var blockCollection *mgo.Collection
+var nodeCollection *mgo.Collection
+var edgeCollection *mgo.Collection
 
 func main() {
 	//read goBlockchainDataAbalysis config
@@ -19,6 +21,8 @@ func main() {
 	session, err := getSession()
 	check(err)
 	blockCollection = getCollection(session, "blocks")
+	nodeCollection = getCollection(session, "nodes")
+	edgeCollection = getCollection(session, "edges")
 
 	// create new client instance
 	client, err := btcrpcclient.New(&btcrpcclient.ConnConfig{
