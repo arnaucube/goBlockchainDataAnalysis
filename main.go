@@ -1,11 +1,15 @@
 package main
 
 import (
+	"fmt"
 	"log"
+	"net/http"
+	"os"
 
 	mgo "gopkg.in/mgo.v2"
 
 	"github.com/btcsuite/btcrpcclient"
+	"github.com/fatih/color"
 )
 
 var blockCollection *mgo.Collection
@@ -45,8 +49,12 @@ func main() {
 	for label, amount := range accounts {
 		log.Printf("%s: %s", label, amount)
 	}
-
-	explore(client, config.GenesisBlock)
+	if len(os.Args) > 1 {
+		if os.Args[1] == "-explore" {
+			fmt.Println("starting to explore blockchain")
+			explore(client, config.GenesisBlock)
+		}
+	}
 
 	// Get the current block count.
 	blockCount, err := client.GetBlockCount()
@@ -54,4 +62,11 @@ func main() {
 		log.Fatal(err)
 	}
 	log.Printf("Block count: %d", blockCount)
+
+	//http server start
+	readServerConfig("./serverConfig.json")
+	color.Green("server running")
+	router := NewRouter()
+	log.Fatal(http.ListenAndServe(":"+serverConfig.ServerPort, router))
+
 }

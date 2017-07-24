@@ -25,8 +25,13 @@ type NodeModel struct {
 }
 
 type EdgeModel struct {
+	Txid   string
 	From   string
 	To     string
-	Label  string
+	Label  float64
 	Arrows string
+}
+type NetworkModel struct {
+	Nodes []NodeModel
+	Edges []EdgeModel
 }

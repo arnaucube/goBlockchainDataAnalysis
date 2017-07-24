@@ -63,13 +63,48 @@ func saveBlock(c *mgo.Collection, block BlockModel) {
 	}
 
 }
-func saveNode(c *mgo.Collection, block BlockModel) {
-	var node NodeModel
-	node.Id = block.Hash
-	node.Label = block.Hash
-	node.Title = block.Hash
-	node.Value = 1
-	node.Shape = "dot"
+
+func getAllNodes() ([]NodeModel, error) {
+	result := []NodeModel{}
+	iter := nodeCollection.Find(bson.M{}).Limit(500).Iter()
+	err := iter.All(&result)
+	return result, err
 }
-func saveEdge(c *mgo.Collection, block BlockModel) {
+
+func saveNode(c *mgo.Collection, node NodeModel) {
+	//first, check if the node already exists
+	result := NodeModel{}
+	err := c.Find(bson.M{"id": node.Id}).One(&result)
+	if err != nil {
+		//node not found, so let's add a new entry
+		err = c.Insert(node)
+		check(err)
+	} else {
+		err = c.Update(bson.M{"id": node.Id}, &node)
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
+}
+
+func getAllEdges() ([]EdgeModel, error) {
+	result := []EdgeModel{}
+	iter := edgeCollection.Find(bson.M{}).Limit(500).Iter()
+	err := iter.All(&result)
+	return result, err
+}
+func saveEdge(c *mgo.Collection, edge EdgeModel) {
+	//first, check if the edge already exists
+	result := EdgeModel{}
+	err := c.Find(bson.M{"txid": edge.Txid}).One(&result)
+	if err != nil {
+		//edge not found, so let's add a new entry
+		err = c.Insert(edge)
+		check(err)
+	} else {
+		err = c.Update(bson.M{"txid": edge.Txid}, &edge)
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
 }

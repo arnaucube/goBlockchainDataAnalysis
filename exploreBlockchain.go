@@ -91,6 +91,28 @@ func explore(client *btcrpcclient.Client, blockHash string) {
 		blockHash = block.NextHash
 
 		//analyze block creator
+		for _, t := range newBlock.Tx {
+			var n1 NodeModel
+			var n2 NodeModel
+			n1.Id = t.From
+			n1.Label = t.From
+			n1.Value = 1
+			n1.Shape = "dot"
+			n2.Id = t.To
+			n2.Label = t.To
+			n2.Value = 1
+			n2.Shape = "dot"
+
+			var e EdgeModel
+			e.From = t.From
+			e.To = t.To
+			e.Label = t.Amount
+			e.Txid = t.Txid
+
+			saveNode(nodeCollection, n1)
+			saveNode(nodeCollection, n2)
+			saveEdge(edgeCollection, e)
+		}
 
 	}
 	fmt.Print("realBlocks (blocks with Fee and Amount values): ")
