@@ -10,6 +10,7 @@ import (
 
 	"github.com/btcsuite/btcrpcclient"
 	"github.com/fatih/color"
+	"github.com/gorilla/handlers"
 )
 
 var blockCollection *mgo.Collection
@@ -51,7 +52,7 @@ func main() {
 	}
 	if len(os.Args) > 1 {
 		if os.Args[1] == "-explore" {
-			fmt.Println("starting to explore blockchain")
+			color.Blue("starting to explore blockchain")
 			explore(client, config.GenesisBlock)
 		}
 	}
@@ -66,7 +67,14 @@ func main() {
 	//http server start
 	readServerConfig("./serverConfig.json")
 	color.Green("server running")
+	fmt.Print("port: ")
+	color.Green(serverConfig.ServerPort)
 	router := NewRouter()
-	log.Fatal(http.ListenAndServe(":"+serverConfig.ServerPort, router))
+
+	headersOk := handlers.AllowedHeaders([]string{"X-Requested-With", "Access-Control-Allow-Origin"})
+	originsOk := handlers.AllowedOrigins([]string{"*"})
+	methodsOk := handlers.AllowedMethods([]string{"GET", "HEAD", "POST", "PUT", "OPTIONS"})
+	log.Fatal(http.ListenAndServe(":"+serverConfig.ServerPort, handlers.CORS(originsOk, headersOk, methodsOk)(router)))
+	//log.Fatal(http.ListenAndServe(":"+serverConfig.ServerPort, router))
 
 }

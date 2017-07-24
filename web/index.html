@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset=utf-8>
+    <!--Import Google Icon Font-->
+    <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--Import materialize.css-->
+    <link type="text/css" rel="stylesheet" href="bower_components/materialize/dist/css/materialize.min.css" media="screen,projection" />
+
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+
+
+    <script type="text/javascript" src="bower_components/vis/dist/vis.min.js"></script>
+    <link href="bower_components/vis/dist/vis.min.css" rel="stylesheet" type="text/css" />
+    <link href="bower_components/vis/dist/vis-network.min.css" rel="stylesheet" type="text/css" />
+    <style type="text/css">
+        #mynetwork {
+            /*width: 75%;*/
+            height: 600px;
+            border: 1px solid lightgray;
+            display: inline-block;
+            top: 0px;
+            background: black;
+        }
+
+        .o-height600 {
+            max-height: 600px!important;
+        }
+
+        .o-height500 {
+            max-height: 500px!important;
+        }
+
+        .o-height300 {
+            max-height: 300px!important;
+        }
+
+        .o-overflowScroll {
+            /*max-height: 600px;*/
+            overflow-y: scroll;
+        }
+
+        .o-mouseoverGrey {
+            background: white;
+            cursor: pointer;
+        }
+
+        .o-mouseoverGrey:hover {
+            background: #cccccc;
+        }
+    </style>
+</head>
+
+<body>
+
+
+
+
+    <nav>
+        <div class="nav-wrapper teal lighten-2">
+            <a href="#" class="brand-logo">goBlockchainDataAnalysis</a>
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+                <li><a href="https://github.com/arnaucode/goBlockchainDataAnalysis" target="_blank"><b>Code</b></a></li>
+            </ul>
+        </div>
+    </nav>
+
+
+    <div class="row" ng-app="webApp" ng-controller="webCtrl">
+
+        <div class="col s3 o-height600">
+
+            <b>Comptes:</b><br>
+            <div class="input-field col s12">
+                <i class="material-icons prefix">search</i>
+                <input ng-model="userfilter" id="search" type="text" class="validate">
+                <label for="search">Search...</label>
+            </div>
+            <ul class="collection o-overflowScroll o-height500">
+                <li ng-click="clickUser(node)" class="collection-item o-mouseoverGrey" ng-repeat="node in nodes">
+                    <img ng-src="{{node.image}}" alt="" class="circle">
+                    <span class="title">{{node.id}}</title>
+                <i class="material-icons">launch</i>
+              </a>
+          </li>
+        </ul>
+      </div>
+      <div id="mynetwork" class="col s9">
+      </div>
+    </div>
+    <div class="row">
+    </div>
+
+      <!--Import jQuery before materialize.js-->
+      <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+      <script type="text/javascript" src="bower_components/materialize/dist/js/materialize.min.js"></script>
+
+      <!--<script src="/socket.io/socket.io.js"></script>-->
+
+      <!-- Angular js -->
+      <script src="bower_components/angular/angular.js"></script>
+      <script src="bower_components/angular-route/angular-route.js"></script>
+
+      <!-- Angular Chart -->
+      <script src="bower_components/chart.js/dist/Chart.min.js"></script>
+      <script src="bower_components/angular-chart.js/dist/angular-chart.min.js"></script>
+
+      <link type="text/css" rel="stylesheet" href="bower_components/toastr/toastr.css"/>
+      <script type="text/javascript" src="bower_components/toastr/toastr.js"></script>
+
+      <script type="text/javascript" src="controllers.js"></script>
+    </body>
+  </html>

@@ -42,6 +42,7 @@ var routes = Routes{
 
 func Index(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintln(w, "ask for recommendations in /r")
+	//http.FileServer(http.Dir("./web"))
 }
 
 /*

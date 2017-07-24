@@ -16,19 +16,19 @@ type BlockModel struct {
 }
 
 type NodeModel struct {
-	Id    string
-	Label string
-	Title string
-	Group string
-	Value int
-	Shape string
+	Id    string `json:"id"`
+	Label string `json:"label"`
+	Title string `json:"title"`
+	Group string `json:"group"`
+	Value int    `json:"value"`
+	Shape string `json:"shape"`
 }
 
 type EdgeModel struct {
 	Txid   string
-	From   string
-	To     string
-	Label  float64
+	From   string  `json:"from"`
+	To     string  `json:"to"`
+	Label  float64 `json:"label"`
 	Arrows string
 }
 type NetworkModel struct {

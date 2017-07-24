@@ -43,48 +43,50 @@ func explore(client *btcrpcclient.Client, blockHash string) {
 		Each Tx moves all the wallet amount, and the realTx amount is sent to the destination
 		and the rest of the wallet amount, is send to another owned wallet
 		*/
-		for k, txHash := range block.Tx {
-			//first Tx is the Fee
-			//after first Tx is the Sent Amount
-			if k > 0 {
-				th, err := chainhash.NewHashFromStr(txHash)
-				check(err)
-				tx, err := client.GetRawTransactionVerbose(th)
-				check(err)
-				var originAddress string
-				for _, Vi := range tx.Vin {
-					th, err := chainhash.NewHashFromStr(Vi.Txid)
+		if len(block.Tx) < 10 {
+			for k, txHash := range block.Tx {
+				//first Tx is the Fee
+				//after first Tx is the Sent Amount
+				if k > 0 {
+					th, err := chainhash.NewHashFromStr(txHash)
 					check(err)
-					txVi, err := client.GetRawTransactionVerbose(th)
+					tx, err := client.GetRawTransactionVerbose(th)
 					check(err)
-					if len(txVi.Vout[0].ScriptPubKey.Addresses) > 0 {
-						originAddress = txVi.Vout[0].ScriptPubKey.Addresses[0]
+					var originAddress string
+					for _, Vi := range tx.Vin {
+						th, err := chainhash.NewHashFromStr(Vi.Txid)
+						check(err)
+						txVi, err := client.GetRawTransactionVerbose(th)
+						check(err)
+						if len(txVi.Vout[0].ScriptPubKey.Addresses) > 0 {
+							originAddress = txVi.Vout[0].ScriptPubKey.Addresses[0]
+						}
+					}
+					for _, Vo := range tx.Vout {
+						totalAmount = totalAmount + Vo.Value
+
+						var blockTx TxModel
+						blockTx.Txid = tx.Txid
+						blockTx.Amount = Vo.Value
+						blockTx.From = originAddress
+						blockTx.To = Vo.ScriptPubKey.Addresses[0]
+						newBlock.Tx = append(newBlock.Tx, blockTx)
 					}
 				}
-				for _, Vo := range tx.Vout {
-					totalAmount = totalAmount + Vo.Value
-
-					var blockTx TxModel
-					blockTx.Txid = tx.Txid
-					blockTx.Amount = Vo.Value
-					blockTx.From = originAddress
-					blockTx.To = Vo.ScriptPubKey.Addresses[0]
-					newBlock.Tx = append(newBlock.Tx, blockTx)
-				}
 			}
-		}
 
-		if totalAmount > 0 {
-			newBlock.Amount = totalAmount
-			saveBlock(blockCollection, newBlock)
-			fmt.Print("Height: ")
-			fmt.Println(newBlock.Height)
-			fmt.Print("Amount: ")
-			fmt.Println(newBlock.Amount)
-			fmt.Print("Fee: ")
-			fmt.Println(newBlock.Fee)
-			fmt.Println("-----")
-			realBlocks++
+			if totalAmount > 0 {
+				newBlock.Amount = totalAmount
+				saveBlock(blockCollection, newBlock)
+				fmt.Print("Height: ")
+				fmt.Println(newBlock.Height)
+				fmt.Print("Amount: ")
+				fmt.Println(newBlock.Amount)
+				fmt.Print("Fee: ")
+				fmt.Println(newBlock.Fee)
+				fmt.Println("-----")
+				realBlocks++
+			}
 		}
 
 		//set the next block
@@ -96,10 +98,12 @@ func explore(client *btcrpcclient.Client, blockHash string) {
 			var n2 NodeModel
 			n1.Id = t.From
 			n1.Label = t.From
+			n1.Title = t.From
 			n1.Value = 1
 			n1.Shape = "dot"
 			n2.Id = t.To
 			n2.Label = t.To
+			n2.Title = t.To
 			n2.Value = 1
 			n2.Shape = "dot"
 
