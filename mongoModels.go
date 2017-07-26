@@ -25,13 +25,13 @@ type NodeModel struct {
 }
 
 type EdgeModel struct {
-	Txid   string
+	Txid   string  `json:"txid"`
 	From   string  `json:"from"`
 	To     string  `json:"to"`
 	Label  float64 `json:"label"`
-	Arrows string
+	Arrows string  `json:"arrows"`
 }
 type NetworkModel struct {
-	Nodes []NodeModel
-	Edges []EdgeModel
+	Nodes []NodeModel `json:"nodes"`
+	Edges []EdgeModel `json:"edges"`
 }

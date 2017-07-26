@@ -9,6 +9,16 @@ import (
 
 func explore(client *btcrpcclient.Client, blockHash string) {
 	var realBlocks int
+
+	var nOrigin NodeModel
+	nOrigin.Id = "origin"
+	nOrigin.Label = "origin"
+	nOrigin.Title = "origin"
+	nOrigin.Group = "origin"
+	nOrigin.Value = 1
+	nOrigin.Shape = "dot"
+	saveNode(nodeCollection, nOrigin)
+
 	for blockHash != "" {
 		//generate hash from string
 		bh, err := chainhash.NewHashFromStr(blockHash)
@@ -43,51 +53,54 @@ func explore(client *btcrpcclient.Client, blockHash string) {
 		Each Tx moves all the wallet amount, and the realTx amount is sent to the destination
 		and the rest of the wallet amount, is send to another owned wallet
 		*/
-		if len(block.Tx) < 10 {
-			for k, txHash := range block.Tx {
-				//first Tx is the Fee
-				//after first Tx is the Sent Amount
-				if k > 0 {
-					th, err := chainhash.NewHashFromStr(txHash)
+		//if len(block.Tx) < 10 {
+		for k, txHash := range block.Tx {
+			//first Tx is the Fee
+			//after first Tx is the Sent Amount
+			if k > 0 {
+				th, err := chainhash.NewHashFromStr(txHash)
+				check(err)
+				tx, err := client.GetRawTransactionVerbose(th)
+				check(err)
+				var originAddress string
+				for _, Vi := range tx.Vin {
+					th, err := chainhash.NewHashFromStr(Vi.Txid)
 					check(err)
-					tx, err := client.GetRawTransactionVerbose(th)
+					txVi, err := client.GetRawTransactionVerbose(th)
 					check(err)
-					var originAddress string
-					for _, Vi := range tx.Vin {
-						th, err := chainhash.NewHashFromStr(Vi.Txid)
-						check(err)
-						txVi, err := client.GetRawTransactionVerbose(th)
-						check(err)
-						if len(txVi.Vout[0].ScriptPubKey.Addresses) > 0 {
-							originAddress = txVi.Vout[0].ScriptPubKey.Addresses[0]
-						}
+					if len(txVi.Vout[0].ScriptPubKey.Addresses) > 0 {
+						originAddress = txVi.Vout[0].ScriptPubKey.Addresses[0]
+					} else {
+						originAddress = "origin"
 					}
-					for _, Vo := range tx.Vout {
-						totalAmount = totalAmount + Vo.Value
 
-						var blockTx TxModel
-						blockTx.Txid = tx.Txid
-						blockTx.Amount = Vo.Value
-						blockTx.From = originAddress
-						blockTx.To = Vo.ScriptPubKey.Addresses[0]
-						newBlock.Tx = append(newBlock.Tx, blockTx)
-					}
+				}
+				for _, Vo := range tx.Vout {
+					totalAmount = totalAmount + Vo.Value
+
+					var blockTx TxModel
+					blockTx.Txid = tx.Txid
+					blockTx.Amount = Vo.Value
+					blockTx.From = originAddress
+					blockTx.To = Vo.ScriptPubKey.Addresses[0]
+					newBlock.Tx = append(newBlock.Tx, blockTx)
 				}
 			}
-
-			if totalAmount > 0 {
-				newBlock.Amount = totalAmount
-				saveBlock(blockCollection, newBlock)
-				fmt.Print("Height: ")
-				fmt.Println(newBlock.Height)
-				fmt.Print("Amount: ")
-				fmt.Println(newBlock.Amount)
-				fmt.Print("Fee: ")
-				fmt.Println(newBlock.Fee)
-				fmt.Println("-----")
-				realBlocks++
-			}
 		}
+
+		if totalAmount > 0 {
+			newBlock.Amount = totalAmount
+			saveBlock(blockCollection, newBlock)
+			fmt.Print("Height: ")
+			fmt.Println(newBlock.Height)
+			fmt.Print("Amount: ")
+			fmt.Println(newBlock.Amount)
+			fmt.Print("Fee: ")
+			fmt.Println(newBlock.Fee)
+			fmt.Println("-----")
+			realBlocks++
+		}
+		//}
 
 		//set the next block
 		blockHash = block.NextHash
@@ -99,11 +112,13 @@ func explore(client *btcrpcclient.Client, blockHash string) {
 			n1.Id = t.From
 			n1.Label = t.From
 			n1.Title = t.From
+			n1.Group = newBlock.Hash
 			n1.Value = 1
 			n1.Shape = "dot"
 			n2.Id = t.To
 			n2.Label = t.To
 			n2.Title = t.To
+			n2.Group = newBlock.Hash
 			n2.Value = 1
 			n2.Shape = "dot"
 
@@ -112,6 +127,7 @@ func explore(client *btcrpcclient.Client, blockHash string) {
 			e.To = t.To
 			e.Label = t.Amount
 			e.Txid = t.Txid
+			e.Arrows = "to"
 
 			saveNode(nodeCollection, n1)
 			saveNode(nodeCollection, n2)

@@ -66,7 +66,7 @@ func saveBlock(c *mgo.Collection, block BlockModel) {
 
 func getAllNodes() ([]NodeModel, error) {
 	result := []NodeModel{}
-	iter := nodeCollection.Find(bson.M{}).Limit(500).Iter()
+	iter := nodeCollection.Find(bson.M{}).Limit(100).Iter()
 	err := iter.All(&result)
 	return result, err
 }
@@ -89,7 +89,7 @@ func saveNode(c *mgo.Collection, node NodeModel) {
 
 func getAllEdges() ([]EdgeModel, error) {
 	result := []EdgeModel{}
-	iter := edgeCollection.Find(bson.M{}).Limit(500).Iter()
+	iter := edgeCollection.Find(bson.M{}).Limit(100).Iter()
 	err := iter.All(&result)
 	return result, err
 }

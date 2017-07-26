@@ -1,0 +1,531 @@
+/* red */
+.c_red50{
+    background: #FFEBEE!important;
+    color: #000000!important;
+}
+.c_red100{
+    background: #FFCDD2!important;
+    color: #000000!important;
+}
+.c_red200{
+    background: #EF9A9A!important;
+    color: #000000!important;
+}
+.c_red300{
+    background: #E57373!important;
+    color: #ffffff!important;
+}
+.c_red400{
+    background: #EF5350!important;
+    color: #ffffff!important;
+}
+.c_red500{
+    background: #F44336!important;
+    color: #ffffff!important;
+}
+.c_red600{
+    background: #E53935!important;
+    color: #ffffff!important;
+}
+.c_red700{
+    background: #D32F2F!important;
+    color: #ffffff!important;
+}
+.c_red800{
+    background: #C62828!important;
+    color: #ffffff!important;
+}
+.c_red900{
+    background: #B71C1C!important;
+    color: #ffffff!important;
+}
+
+.ctext_red400{
+    color: #EF5350!important;
+}
+.ctext_red500{
+    color: #F44336!important;
+}
+.ctext_red600{
+    color: #E53935!important;
+}
+
+/* pink */
+.c_pink50{
+    background: #FCE4EC!important;
+    color: #000000!important;
+}
+.c_pink100{
+    background: #F8BBD0!important;
+    color: #000000!important;
+}
+.c_pink200{
+    background: #F48FB1!important;
+    color: #000000!important;
+}
+.c_pink300{
+    background: #F06292!important;
+    color: #ffffff!important;
+}
+.c_pink400{
+    background: #EC407A!important;
+    color: #ffffff!important;
+}
+.c_pink500{
+    background: #E91E63!important;
+    color: #ffffff!important;
+}
+.c_pink600{
+    background: #D81B60!important;
+    color: #ffffff!important;
+}
+.c_pink700{
+    background: #C2185B!important;
+    color: #ffffff!important;
+}
+.c_pink800{
+    background: #AD1457!important;
+    color: #ffffff!important;
+}
+.c_pink900{
+    background: #880E4F!important;
+    color: #ffffff!important;
+}
+
+/* deepPurple */
+.c_deepPurple50{
+    background: #EDE7F6!important;
+    color: #000000!important;
+}
+.c_deepPurple100{
+    background: #D1C4E9!important;
+    color: #000000!important;
+}
+.c_deepPurple200{
+    background: #B39DDB!important;
+    color: #000000!important;
+}
+.c_deepPurple300{
+    background: #9575CD!important;
+    color: #ffffff!important;
+}
+.c_deepPurple400{
+    background: #7E57C2!important;
+    color: #ffffff!important;
+}
+.c_deepPurple500{
+    background: #673AB7!important;
+    color: #ffffff!important;
+}
+.c_deepPurple600{
+    background: #5E35B1!important;
+    color: #ffffff!important;
+}
+.c_deepPurple700{
+    background: #512DA8!important;
+    color: #ffffff!important;
+}
+.c_deepPurple800{
+    background: #4527A0!important;
+    color: #ffffff!important;
+}
+.c_deepPurple900{
+    background: #311B92!important;
+    color: #ffffff!important;
+}
+
+.c_deepPurpleG000to200{
+    background: -moz-linear-gradient(0deg, #ffffff 0%, #D1C4E9 100%)!important; /* ff3.6+ */
+    background: -webkit-gradient(linear, left top, right top, color-stop(0%, #ffffff), color-stop(100%, #D1C4E9))!important; /* safari4+,chrome */
+    background: -webkit-linear-gradient(0deg, #ffffff 0%, #D1C4E9 100%)!important; /* safari5.1+,chrome10+ */
+    background: -o-linear-gradient(0deg, #ffffff 0%, #D1C4E9 100%)!important; /* opera 11.10+ */
+    background: -ms-linear-gradient(0deg, #ffffff 0%, #D1C4E9 100%)!important; /* ie10+ */
+    background: linear-gradient(90deg, #ffffff 0%, #D1C4E9 100%)!important; /* w3c */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#D1C4E9',GradientType=1 )!important; /* ie6-9 */
+}
+.c_deepPurpleG500to300{
+    background: -moz-linear-gradient(219deg, #9575CD 0%, #673AB7 100%)!important; /* ff3.6+ */
+    background: -webkit-gradient(linear, left bottom, right top, color-stop(0%, #673AB7), color-stop(100%, #9575CD))!important; /* safari4+,chrome */
+    background: -webkit-linear-gradient(219deg, #9575CD 0%, #673AB7 100%)!important; /* safari5.1+,chrome10+ */
+    background: -o-linear-gradient(219deg, #9575CD 0%, #673AB7 100%)!important; /* opera 11.10+ */
+    background: -ms-linear-gradient(219deg, #9575CD 0%, #673AB7 100%)!important; /* ie10+ */
+    background: linear-gradient(231deg, #9575CD 0%, #673AB7 100%)!important; /* w3c */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#673AB7', endColorstr='#9575CD',GradientType=1 )!important; /* ie6-9 */
+    color: #ffffff!important;
+}
+.c_deepPurpleG300to500{
+    background: -moz-linear-gradient(42deg, #9575CD 0%, #673AB7 100%)!important; /* ff3.6+ */
+    background: -webkit-gradient(linear, left bottom, right top, color-stop(0%, #9575CD), color-stop(100%, #673AB7))!important; /* safari4+,chrome */
+    background: -webkit-linear-gradient(42deg, #9575CD 0%, #673AB7 100%)!important; /* safari5.1+,chrome10+ */
+    background: -o-linear-gradient(42deg, #9575CD 0%, #673AB7 100%)!important; /* opera 11.10+ */
+    background: -ms-linear-gradient(42deg, #9575CD 0%, #673AB7 100%)!important; /* ie10+ */
+    background: linear-gradient(48deg, #9575CD 0%, #673AB7 100%)!important; /* w3c */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#9575CD', endColorstr='#673AB7',GradientType=1 )!important; /* ie6-9 */
+    color: #ffffff!important;
+}
+
+/* indigo */
+.c_indigo50{
+    background:#E8EAF6!important;
+    color: #000000!important;
+}
+.c_indigo100{
+    background:#C5CAE9!important;
+    color: #000000!important;
+}
+.c_indigo200{
+    background:#9FA8DA!important;
+    color: #000000!important;
+}
+.c_indigo300{
+    background:#7986CB!important;
+    color: #ffffff!important;
+}
+.c_indigo400{
+    background:#5C6BC0!important;
+    color: #ffffff!important;
+}
+.c_indigo500{
+    background:#3F51B5!important;
+    color: #ffffff!important;
+}
+.c_indigo600{
+    background:#3949AB!important;
+    color: #ffffff!important;
+}
+.c_indigo700{
+    background:#303F9F!important;
+    color: #ffffff!important;
+}
+.c_indigo800{
+    background:#283593!important;
+    color: #ffffff!important;
+}
+.c_indigo900{
+    background:#1A237E!important;
+    color: #ffffff!important;
+}
+
+.ctext_indigo500{
+    color: #3F51B5!important;
+}
+
+/* blue */
+.c_blue50{
+    background: #E3F2FD!important;
+    color: #000000!important;
+}
+.c_blue100{
+    background: #BBDEFB!important;
+    color: #000000!important;
+}
+.c_blue200{
+    background: #90CAF9!important;
+    color: #000000!important;
+}
+.c_blue300{
+    background: #64B5F6!important;
+    color: #ffffff!important;
+}
+.c_blue400{
+    background: #42A5F5!important;
+    color: #ffffff!important;
+}
+.c_blue500{
+    background: #2196F3!important;
+    color: #ffffff!important;
+}
+.c_blue600{
+    background: #1E88E5!important;
+    color: #ffffff!important;
+}
+.c_blue700{
+    background: #1976D2!important;
+    color: #ffffff!important;
+}
+.c_blue800{
+    background: #1565C0!important;
+    color: #ffffff!important;
+}
+.c_blue900{
+    background: #0D47A1!important;
+    color: #ffffff!important;
+}
+
+
+/* cyan */
+.c_cyan50{
+    background: #E0F7FA!important;
+    color: #000000!important;
+}
+.c_cyan100{
+    background: #B2EBF2!important;
+    color: #000000!important;
+}
+.c_cyan200{
+    background: #80DEEA!important;
+    color: #000000!important;
+}
+.c_cyan300{
+    background: #4DD0E1!important;
+    color: #ffffff!important;
+}
+.c_cyan400{
+    background: #26C6DA!important;
+    color: #ffffff!important;
+}
+.c_cyan500{
+    background: #00BCD4!important;
+    color: #ffffff!important;
+}
+.c_cyan600{
+    background: #00ACC1!important;
+    color: #ffffff!important;
+}
+.c_cyan700{
+    background: #0097A7!important;
+    color: #ffffff!important;
+}
+.c_cyan800{
+    background: #00838F!important;
+    color: #ffffff!important;
+}
+.c_cyan900{
+    background: #006064!important;
+    color: #ffffff!important;
+}
+
+/* green */
+.c_green50{
+    background: #E8F5E9!important;
+    color: #000000!important;
+}
+.c_green100{
+    background: #C8E6C9!important;
+    color: #000000!important;
+}
+.c_green200{
+    background: #A5D6A7!important;
+    color: #000000!important;
+}
+.c_green300{
+    background: #81C784!important;
+    color: #ffffff!important;
+}
+.c_green400{
+    background: #66BB6A!important;
+    color: #ffffff!important;
+}
+.c_green500{
+    background: #4CAF50!important;
+    color: #ffffff!important;
+}
+.c_green600{
+    background: #43A047!important;
+    color: #ffffff!important;
+}
+.c_green700{
+    background: #388E3C!important;
+    color: #ffffff!important;
+}
+.c_green800{
+    background: #2E7D32!important;
+    color: #ffffff!important;
+}
+.c_green900{
+    background: #1B5E20!important;
+    color: #ffffff!important;
+}
+
+/* yellow */
+.c_yellow50{
+    background: #FFFDE7!important;
+    color: #000000!important;
+}
+.c_yellow100{
+    background: #FFF9C4!important;
+    color: #000000!important;
+}
+.c_yellow200{
+    background: #FFF59D!important;
+    color: #000000!important;
+}
+.c_yellow300{
+    background: #FFF176!important;
+    color: #ffffff!important;
+}
+.c_yellow400{
+    background: #FFEE58!important;
+    color: #ffffff!important;
+}
+.c_yellow500{
+    background: #FFEB3B!important;
+    color: #ffffff!important;
+}
+.c_yellow600{
+    background: #FDD835!important;
+    color: #ffffff!important;
+}
+.c_yellow700{
+    background: #FBC02D!important;
+    color: #ffffff!important;
+}
+.c_yellow800{
+    background: #F9A825!important;
+    color: #ffffff!important;
+}
+.c_yellow900{
+    background: #F57F17!important;
+    color: #ffffff!important;
+}
+
+/* orange */
+.c_orange50{
+    background: #FFF3E0!important;
+    color: #000000!important;
+}
+.c_orange100{
+    background: #FFE0B2!important;
+    color: #000000!important;
+}
+.c_orange200{
+    background: #FFCC80!important;
+    color: #000000!important;
+}
+.c_orange300{
+    background: #FFB74D!important;
+    color: #ffffff!important;
+}
+.c_orange400{
+    background: #FFA726!important;
+    color: #ffffff!important;
+}
+.c_orange500{
+    background: #FF9800!important;
+    color: #ffffff!important;
+}
+.c_orange600{
+    background: #FB8C00!important;
+    color: #ffffff!important;
+}
+.c_orange700{
+    background: #F57C00!important;
+    color: #ffffff!important;
+}
+.c_orange800{
+    background: #EF6C00!important;
+    color: #ffffff!important;
+}
+.c_orange900{
+    background: #E65100!important;
+    color: #ffffff!important;
+}
+
+/* grey */
+.c_grey50{
+    background: #FAFAFA!important;
+    color: #000000!important;
+}
+.c_grey100{
+    background: #F5F5F5!important;
+    color: #000000!important;
+}
+.c_grey200{
+    background: #EEEEEE!important;
+    color: #000000!important;
+}
+.c_grey300{
+    background: #E0E0E0!important;
+    color: #ffffff!important;
+}
+.c_grey400{
+    background: #BDBDBD!important;
+    color: #ffffff!important;
+}
+.c_grey500{
+    background: #9E9E9E!important;
+    color: #ffffff!important;
+}
+.c_grey600{
+    background: #757575!important;
+    color: #ffffff!important;
+}
+.c_grey700{
+    background: #616161!important;
+    color: #ffffff!important;
+}
+.c_grey800{
+    background: #424242!important;
+    color: #ffffff!important;
+}
+.c_grey900{
+    background: #212121!important;
+    color: #ffffff!important;
+}
+
+
+
+/* blue grey */
+.c_blueGrey50{
+    background: #ECEFF1!important;
+    color: #000000!important;
+}
+.c_blueGrey100{
+    background: #CFD8DC!important;
+    color: #000000!important;
+}
+.c_blueGrey200{
+    background: #B0BEC5!important;
+    color: #000000!important;
+}
+.c_blueGrey300{
+    background: #90A4AE!important;
+    color: #ffffff!important;
+}
+.c_blueGrey400{
+    background: #78909C!important;
+    color: #ffffff!important;
+}
+.c_blueGrey500{
+    background: #607D8B!important;
+    color: #ffffff!important;
+}
+.c_blueGrey600{
+    background: #546E7A!important;
+    color: #ffffff!important;
+}
+.c_blueGrey700{
+    background: #455A64!important;
+    color: #ffffff!important;
+}
+.c_blueGrey800{
+    background: #37474F!important;
+    color: #ffffff!important;
+}
+.c_blueGrey900{
+    background: #263238!important;
+    color: #ffffff!important;
+}
+
+
+.ctext_blueGrey500{
+    color: #607D8B!important;
+}
+
+.c_blueGradient1{
+    background: #2d4a56!important;
+    background: -moz-linear-gradient(left, #2d4a56 0%, #1c2b36 100%)!important;
+    background: -webkit-linear-gradient(left, #2d4a56 0%,#1c2b36 100%)!important;
+    background: linear-gradient(to right, #2d4a56 0%,#1c2b36 100%)!important;
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2d4a56', endColorstr='#1c2b36',GradientType=1 )!important;
+
+    color: rgba(255,255,255,0.9)!important;
+}
+.c_blue2{
+    background: rgb(28,43,54)!important;
+    color: rgba(255,255,255,0.8)!important;
+}
+
+.cf_green2{
+    color: rgb(32,158,145)!important;
+}

@@ -1,0 +1,54 @@
+<div class="container">
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="panel">
+                <div class="panel-heading c_blueGrey300">
+                    <h3 class="panel-title">Last blocks</h3>
+                </div>
+                <div class="panel-body" style="max-height: 500px;overflow-y: scroll;">
+
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="panel">
+                <div class="panel-heading c_blueGrey300">
+                    <h3 class="panel-title">Last transactions</h3>
+                </div>
+                <div class="panel-body" style="max-height: 500px;overflow-y: scroll;">
+                    <table class="table table-striped table-hover ">
+                        <thead>
+                            <tr>
+                                <th>Hash</th>
+                                <th>From</th>
+                                <th>Date</th>
+                                <th>nºSubtx</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="tx in txs">
+                                <td>
+                                    txhash
+                                </td>
+                                <td>{{tx.f}}</td>
+                                <td>{{tx.date}}</td>
+                                <td>{{tx.subtx.length}}</td>
+                                <td><a ng-href="#!/tx/{{tx.id}}">View</a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="panel">
+                <div class="panel-heading c_blueGrey300">
+                    <h3 class="panel-title">Other</h3>
+                </div>
+                <div class="panel-body">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
