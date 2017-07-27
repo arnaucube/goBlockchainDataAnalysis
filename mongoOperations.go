@@ -74,16 +74,17 @@ func getAllNodes() ([]NodeModel, error) {
 func saveNode(c *mgo.Collection, node NodeModel) {
 	//first, check if the node already exists
 	result := NodeModel{}
-	err := c.Find(bson.M{"id": node.Id, "group": node.Group}).One(&result)
+	err := c.Find(bson.M{"id": node.Id}).One(&result)
 	if err != nil {
 		//node not found, so let's add a new entry
 		err = c.Insert(node)
 		check(err)
 	} else {
-		err = c.Update(bson.M{"id": node.Id, "group": node.Group}, &node)
+		/*err = c.Update(bson.M{"id": node.Id}, &node)
 		if err != nil {
 			log.Fatal(err)
 		}
+		*/
 	}
 }
 

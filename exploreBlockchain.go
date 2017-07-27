@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"strconv"
 
 	"gopkg.in/mgo.v2/bson"
 
@@ -46,6 +47,21 @@ func explore(client *btcrpcclient.Client, blockHash string) {
 
 				var originAddresses []string
 				var outputAddresses []string
+				for _, Vo := range tx.Vout {
+					//if Vo.Value > 0 {
+					for _, outputAddr := range Vo.ScriptPubKey.Addresses {
+						outputAddresses = append(outputAddresses, outputAddr)
+						var n2 NodeModel
+						n2.Id = outputAddr
+						n2.Label = outputAddr
+						n2.Title = outputAddr
+						n2.Group = strconv.FormatInt(block.Height, 10)
+						n2.Value = 1
+						n2.Shape = "dot"
+						saveNode(nodeCollection, n2)
+					}
+					//}
+				}
 				for _, Vi := range tx.Vin {
 					th, err := chainhash.NewHashFromStr(Vi.Txid)
 					check(err)
@@ -62,38 +78,23 @@ func explore(client *btcrpcclient.Client, blockHash string) {
 							n1.Value = 1
 							n1.Shape = "dot"
 							saveNode(nodeCollection, n1)
+
+							for _, outputAddr := range outputAddresses {
+								var e EdgeModel
+								e.From = originAddr
+								e.To = outputAddr
+								e.Label = txVi.Vout[Vi.Vout].Value
+								e.Txid = tx.Txid
+								e.Arrows = "to"
+								e.BlockHeight = block.Height
+								saveEdge(edgeCollection, e)
+								//fmt.Println(e)
+							}
 						}
 					} else {
 						originAddresses = append(originAddresses, "origin")
 					}
 
-				}
-				for _, Vo := range tx.Vout {
-					//if Vo.Value > 0 {
-					for _, outputAddr := range Vo.ScriptPubKey.Addresses {
-						outputAddresses = append(outputAddresses, outputAddr)
-						var n2 NodeModel
-						n2.Id = outputAddr
-						n2.Label = outputAddr
-						n2.Title = outputAddr
-						n2.Group = string(block.Height)
-						n2.Value = 1
-						n2.Shape = "dot"
-						saveNode(nodeCollection, n2)
-
-						for _, originAddr := range originAddresses {
-							var e EdgeModel
-							e.From = originAddr
-							e.To = outputAddr
-							e.Label = Vo.Value
-							e.Txid = tx.Txid
-							e.Arrows = "to"
-							e.BlockHeight = block.Height
-							saveEdge(edgeCollection, e)
-							//fmt.Println(e)
-						}
-					}
-					//}
 				}
 				fmt.Print("originAddresses: ")
 				fmt.Println(len(originAddresses))
