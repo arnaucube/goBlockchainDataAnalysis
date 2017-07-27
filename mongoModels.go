@@ -28,11 +28,28 @@ type EdgeModel struct {
 	Txid        string  `json:"txid"`
 	From        string  `json:"from"`
 	To          string  `json:"to"`
-	Label       float64 `json:"label"`
+	Label       float64 `json:"label"` //the value of transaction
 	Arrows      string  `json:"arrows"`
 	BlockHeight int64   `json:"blockheight"`
 }
 type NetworkModel struct {
 	Nodes []NodeModel `json:"nodes"`
 	Edges []EdgeModel `json:"edges"`
+}
+
+type SankeyNodeModel struct {
+	//StringNode string `json:"stringnode"`
+	Node int    `json:"node"`
+	Name string `json:"name"`
+}
+type SankeyLinkModel struct {
+	//StringSource string  `json:"stringsource"`
+	Source int `json:"source"`
+	//StringTarget string  `json:"stringtarget"`
+	Target int     `json:"target"`
+	Value  float64 `json:"value"`
+}
+type SankeyModel struct {
+	Nodes []SankeyNodeModel `json:"nodes"`
+	Links []SankeyLinkModel `json:"links"`
 }

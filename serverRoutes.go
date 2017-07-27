@@ -32,6 +32,12 @@ var routes = Routes{
 		AddressNetwork,
 	},
 	Route{
+		"AddressSankey",
+		"GET",
+		"/address/sankey/{address}",
+		AddressSankey,
+	},
+	Route{
 		"NetworkMap",
 		"Get",
 		"/map",
@@ -97,6 +103,45 @@ func AddressNetwork(w http.ResponseWriter, r *http.Request) {
 		check(err)
 
 		fmt.Fprintln(w, string(jNetwork))
+	}
+}
+func AddressSankey(w http.ResponseWriter, r *http.Request) {
+	ipFilter(w, r)
+
+	vars := mux.Vars(r)
+	address := vars["address"]
+	if address == "undefined" {
+		fmt.Fprintln(w, "not valid address")
+	} else {
+		network := addressTree(address)
+		var sankey SankeyModel
+
+		fmt.Println("network generated")
+		mapNodeK := make(map[string]int)
+		for k, n := range network.Nodes {
+			var sankeyNode SankeyNodeModel
+			//sankeyNode.StringNode = n.Id
+			sankeyNode.Node = k
+			sankeyNode.Name = n.Id
+			sankey.Nodes = append(sankey.Nodes, sankeyNode)
+			mapNodeK[n.Id] = k
+		}
+		for _, e := range network.Edges {
+			var sankeyLink SankeyLinkModel
+			//sankeyLink.StringSource = e.From
+			sankeyLink.Source = mapNodeK[e.From]
+			//sankeyLink.StringTarget = e.To
+			sankeyLink.Target = mapNodeK[e.To]
+			sankeyLink.Value = e.Label
+			sankey.Links = append(sankey.Links, sankeyLink)
+		}
+		fmt.Println("Sankey generated")
+
+		//convert []resp struct to json
+		jsonSankey, err := json.Marshal(sankey)
+		check(err)
+
+		fmt.Fprintln(w, string(jsonSankey))
 	}
 }
 func NetworkMap(w http.ResponseWriter, r *http.Request) {
