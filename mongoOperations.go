@@ -118,3 +118,11 @@ func nodeInNodes(nodes []NodeModel, node NodeModel) bool {
 	}
 	return false
 }
+func edgeInEdges(edges []EdgeModel, edge EdgeModel) bool {
+	for _, e := range edges {
+		if e.From == edge.From && e.To == edge.To {
+			return true
+		}
+	}
+	return false
+}

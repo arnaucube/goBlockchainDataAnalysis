@@ -4,11 +4,8 @@ import (
 	"fmt"
 	"strconv"
 
-	"gopkg.in/mgo.v2/bson"
-
 	"github.com/btcsuite/btcd/chaincfg/chainhash"
 	"github.com/btcsuite/btcrpcclient"
-	"github.com/fatih/color"
 )
 
 func explore(client *btcrpcclient.Client, blockHash string) {
@@ -110,41 +107,4 @@ func explore(client *btcrpcclient.Client, blockHash string) {
 	fmt.Print("realBlocks (blocks with Fee and Amount values): ")
 	fmt.Println(realBlocks)
 	fmt.Println("reached the end of blockchain")
-}
-func addressTree(address string) NetworkModel {
-	var network NetworkModel
-
-	var currentEdge EdgeModel
-	currentEdge.From = "a"
-	currentEdge.To = "b"
-	for currentEdge.From != currentEdge.To {
-		color.Green("for")
-		fmt.Println(address)
-		//get edges before the address
-		edges := []EdgeModel{}
-		err := edgeCollection.Find(bson.M{"to": address}).All(&edges)
-		check(err)
-		for _, edge := range edges {
-			network.Edges = append(network.Edges, edge)
-			fmt.Println(edge)
-		}
-		//get all nodes from edges
-		for _, edge := range edges {
-			node := NodeModel{}
-			err := nodeCollection.Find(bson.M{"id": edge.From}).One(&node)
-			check(err)
-			if nodeInNodes(network.Nodes, node) == false {
-				network.Nodes = append(network.Nodes, node)
-			}
-
-			err = nodeCollection.Find(bson.M{"id": edge.To}).One(&node)
-			check(err)
-			if nodeInNodes(network.Nodes, node) == false {
-				network.Nodes = append(network.Nodes, node)
-			}
-		}
-		address = edges[0].From
-		currentEdge = edges[0]
-	}
-	return network
 }
