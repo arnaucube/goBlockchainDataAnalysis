@@ -3,13 +3,15 @@ package main
 import (
 	"fmt"
 
+	"gopkg.in/mgo.v2/bson"
+
 	"github.com/btcsuite/btcd/chaincfg/chainhash"
 	"github.com/btcsuite/btcrpcclient"
+	"github.com/fatih/color"
 )
 
 func explore(client *btcrpcclient.Client, blockHash string) {
 	var realBlocks int
-
 	var nOrigin NodeModel
 	nOrigin.Id = "origin"
 	nOrigin.Label = "origin"
@@ -26,116 +28,122 @@ func explore(client *btcrpcclient.Client, blockHash string) {
 		block, err := client.GetBlockVerbose(bh)
 		check(err)
 
-		var newBlock BlockModel
-		newBlock.Hash = block.Hash
-		newBlock.Height = block.Height
-		newBlock.Confirmations = block.Confirmations
-
-		//get Fee value
-		th, err := chainhash.NewHashFromStr(block.Tx[0])
-		check(err)
-		tx, err := client.GetRawTransactionVerbose(th)
-		check(err)
-		var totalFee float64
-		for _, Vo := range tx.Vout {
-			totalFee = totalFee + Vo.Value
-		}
-		newBlock.Fee = totalFee
-
-		//for each Tx, get the Tx value
-		var totalAmount float64
-		/*inside each block, there are []Tx
-		inside each Tx, if is the Tx[0], is the Fees
-		in the Tx[n] where n>0, each Tx is independent,
-		and inside each Tx there are []Vout.
-		Usually Vout[0] is the real Tx value
-		and the Vout[1] is the rest of the amount in the original wallet.
-		Each Tx moves all the wallet amount, and the realTx amount is sent to the destination
-		and the rest of the wallet amount, is send to another owned wallet
-		*/
 		//if len(block.Tx) < 10 {
 		for k, txHash := range block.Tx {
-			//first Tx is the Fee
-			//after first Tx is the Sent Amount
 			if k > 0 {
+				realBlocks++
+				fmt.Print("Block Height: ")
+				fmt.Print(block.Height)
+				fmt.Print(", num of Tx: ")
+				fmt.Print(k)
+				fmt.Print("/")
+				fmt.Println(len(block.Tx) - 1)
+
 				th, err := chainhash.NewHashFromStr(txHash)
 				check(err)
 				tx, err := client.GetRawTransactionVerbose(th)
 				check(err)
-				var originAddress string
+
+				var originAddresses []string
+				var outputAddresses []string
 				for _, Vi := range tx.Vin {
 					th, err := chainhash.NewHashFromStr(Vi.Txid)
 					check(err)
 					txVi, err := client.GetRawTransactionVerbose(th)
 					check(err)
-					if len(txVi.Vout[0].ScriptPubKey.Addresses) > 0 {
-						originAddress = txVi.Vout[0].ScriptPubKey.Addresses[0]
+					if len(txVi.Vout[Vi.Vout].ScriptPubKey.Addresses) > 0 {
+						for _, originAddr := range txVi.Vout[Vi.Vout].ScriptPubKey.Addresses {
+							originAddresses = append(originAddresses, originAddr)
+							var n1 NodeModel
+							n1.Id = originAddr
+							n1.Label = originAddr
+							n1.Title = originAddr
+							n1.Group = string(block.Height)
+							n1.Value = 1
+							n1.Shape = "dot"
+							saveNode(nodeCollection, n1)
+						}
 					} else {
-						originAddress = "origin"
+						originAddresses = append(originAddresses, "origin")
 					}
 
 				}
 				for _, Vo := range tx.Vout {
-					totalAmount = totalAmount + Vo.Value
+					//if Vo.Value > 0 {
+					for _, outputAddr := range Vo.ScriptPubKey.Addresses {
+						outputAddresses = append(outputAddresses, outputAddr)
+						var n2 NodeModel
+						n2.Id = outputAddr
+						n2.Label = outputAddr
+						n2.Title = outputAddr
+						n2.Group = string(block.Height)
+						n2.Value = 1
+						n2.Shape = "dot"
+						saveNode(nodeCollection, n2)
 
-					var blockTx TxModel
-					blockTx.Txid = tx.Txid
-					blockTx.Amount = Vo.Value
-					blockTx.From = originAddress
-					blockTx.To = Vo.ScriptPubKey.Addresses[0]
-					newBlock.Tx = append(newBlock.Tx, blockTx)
+						for _, originAddr := range originAddresses {
+							var e EdgeModel
+							e.From = originAddr
+							e.To = outputAddr
+							e.Label = Vo.Value
+							e.Txid = tx.Txid
+							e.Arrows = "to"
+							e.BlockHeight = block.Height
+							saveEdge(edgeCollection, e)
+							//fmt.Println(e)
+						}
+					}
+					//}
 				}
+				fmt.Print("originAddresses: ")
+				fmt.Println(len(originAddresses))
+				fmt.Print("outputAddresses: ")
+				fmt.Println(len(outputAddresses))
 			}
 		}
-
-		if totalAmount > 0 {
-			newBlock.Amount = totalAmount
-			saveBlock(blockCollection, newBlock)
-			fmt.Print("Height: ")
-			fmt.Println(newBlock.Height)
-			fmt.Print("Amount: ")
-			fmt.Println(newBlock.Amount)
-			fmt.Print("Fee: ")
-			fmt.Println(newBlock.Fee)
-			fmt.Println("-----")
-			realBlocks++
-		}
 		//}
-
 		//set the next block
 		blockHash = block.NextHash
-
-		//analyze block creator
-		for _, t := range newBlock.Tx {
-			var n1 NodeModel
-			var n2 NodeModel
-			n1.Id = t.From
-			n1.Label = t.From
-			n1.Title = t.From
-			n1.Group = newBlock.Hash
-			n1.Value = 1
-			n1.Shape = "dot"
-			n2.Id = t.To
-			n2.Label = t.To
-			n2.Title = t.To
-			n2.Group = newBlock.Hash
-			n2.Value = 1
-			n2.Shape = "dot"
-
-			var e EdgeModel
-			e.From = t.From
-			e.To = t.To
-			e.Label = t.Amount
-			e.Txid = t.Txid
-			e.Arrows = "to"
-
-			saveNode(nodeCollection, n1)
-			saveNode(nodeCollection, n2)
-			saveEdge(edgeCollection, e)
-		}
-
 	}
+
 	fmt.Print("realBlocks (blocks with Fee and Amount values): ")
 	fmt.Println(realBlocks)
 	fmt.Println("reached the end of blockchain")
+}
+func addressTree(address string) NetworkModel {
+	var network NetworkModel
+
+	var currentEdge EdgeModel
+	currentEdge.From = "a"
+	currentEdge.To = "b"
+	for currentEdge.From != currentEdge.To {
+		color.Green("for")
+		fmt.Println(address)
+		//get edges before the address
+		edges := []EdgeModel{}
+		err := edgeCollection.Find(bson.M{"to": address}).All(&edges)
+		check(err)
+		for _, edge := range edges {
+			network.Edges = append(network.Edges, edge)
+			fmt.Println(edge)
+		}
+		//get all nodes from edges
+		for _, edge := range edges {
+			node := NodeModel{}
+			err := nodeCollection.Find(bson.M{"id": edge.From}).One(&node)
+			check(err)
+			if nodeInNodes(network.Nodes, node) == false {
+				network.Nodes = append(network.Nodes, node)
+			}
+
+			err = nodeCollection.Find(bson.M{"id": edge.To}).One(&node)
+			check(err)
+			if nodeInNodes(network.Nodes, node) == false {
+				network.Nodes = append(network.Nodes, node)
+			}
+		}
+		address = edges[0].From
+		currentEdge = edges[0]
+	}
+	return network
 }

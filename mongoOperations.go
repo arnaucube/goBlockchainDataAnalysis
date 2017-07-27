@@ -66,7 +66,7 @@ func saveBlock(c *mgo.Collection, block BlockModel) {
 
 func getAllNodes() ([]NodeModel, error) {
 	result := []NodeModel{}
-	iter := nodeCollection.Find(bson.M{}).Limit(100).Iter()
+	iter := nodeCollection.Find(bson.M{}).Limit(10000).Iter()
 	err := iter.All(&result)
 	return result, err
 }
@@ -74,13 +74,13 @@ func getAllNodes() ([]NodeModel, error) {
 func saveNode(c *mgo.Collection, node NodeModel) {
 	//first, check if the node already exists
 	result := NodeModel{}
-	err := c.Find(bson.M{"id": node.Id}).One(&result)
+	err := c.Find(bson.M{"id": node.Id, "group": node.Group}).One(&result)
 	if err != nil {
 		//node not found, so let's add a new entry
 		err = c.Insert(node)
 		check(err)
 	} else {
-		err = c.Update(bson.M{"id": node.Id}, &node)
+		err = c.Update(bson.M{"id": node.Id, "group": node.Group}, &node)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -89,22 +89,31 @@ func saveNode(c *mgo.Collection, node NodeModel) {
 
 func getAllEdges() ([]EdgeModel, error) {
 	result := []EdgeModel{}
-	iter := edgeCollection.Find(bson.M{}).Limit(100).Iter()
+	iter := edgeCollection.Find(bson.M{}).Limit(10000).Iter()
 	err := iter.All(&result)
 	return result, err
 }
 func saveEdge(c *mgo.Collection, edge EdgeModel) {
 	//first, check if the edge already exists
 	result := EdgeModel{}
-	err := c.Find(bson.M{"txid": edge.Txid}).One(&result)
+	err := c.Find(bson.M{"txid": edge.Txid, "to": edge.To, "from": edge.From, "blockheight": edge.BlockHeight, "label": edge.Label}).One(&result)
 	if err != nil {
 		//edge not found, so let's add a new entry
 		err = c.Insert(edge)
 		check(err)
 	} else {
-		err = c.Update(bson.M{"txid": edge.Txid}, &edge)
+		err = c.Update(bson.M{"txid": edge.Txid, "to": edge.To, "from": edge.From, "blockheight": edge.BlockHeight, "label": edge.Label}, &edge)
 		if err != nil {
 			log.Fatal(err)
 		}
 	}
+}
+
+func nodeInNodes(nodes []NodeModel, node NodeModel) bool {
+	for _, n := range nodes {
+		if n.Id == node.Id {
+			return true
+		}
+	}
+	return false
 }

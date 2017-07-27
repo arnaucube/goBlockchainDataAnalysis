@@ -2,10 +2,13 @@
     <div class="row">
         <div class="col-sm-3">
             <div class="panel-heading c_blueGrey300">
-                <h3 class="panel-title">Nodes</h3>
+                <h3 class="panel-title">All addresses</h3>
             </div>
-            <div class="panel-body" style="max-height: 300px;overflow-y: scroll;">
-                <div ng-click="focusNode(node)" class="list-group-item" ng-repeat="node in nodes">
+            <div class="panel-body" style="max-height: 500px;overflow-y: scroll;">
+                <div class="form-group label-floating">
+                    <input ng-model="filterAddress" abmFormControl class="form-control" placeholder="Filter" type="text">
+                </div>
+                <div ng-click="getAddressNetwork(node)" class="list-group-item" ng-repeat="node in addresses | filter: filterAddress">
                     <div class="row-content">
                         <p class="list-group-item-text">{{node.id}}</p>
 
@@ -13,19 +16,13 @@
                     </div>
                 </div>
             </div>
-            <div class="panel-heading c_blueGrey300">
-                <h3 class="panel-title">Selected node</h3>
-            </div>
-            <div class="panel-body" style="max-height: 200px;overflow-y: scroll;">
-                {{selectedNode.nodes}}
-            </div>
         </div>
         <div class="col-sm-9">
             <div class="panel-heading c_blueGrey300">
                 <h3 class="panel-title">Network</h3>
             </div>
             <div class="panel-body">
-                <div id="mynetwork" style="height:500px;"></div>
+                <div id="mynetwork" style="height:800px;"></div>
             </div>
         </div>
     </div>

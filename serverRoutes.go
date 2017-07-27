@@ -4,6 +4,10 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+
+	"gopkg.in/mgo.v2/bson"
+
+	"github.com/gorilla/mux"
 )
 
 type Routes []Route
@@ -15,13 +19,18 @@ var routes = Routes{
 		"/",
 		Index,
 	},
-	/*	Route{
-			"Recommendations",
-			"GET",
-			"/r/{userid}/{nrec}",
-			Recommendations,
-		},
-	*/
+	Route{
+		"AllAddresses",
+		"Get",
+		"/alladdresses",
+		AllAddresses,
+	},
+	Route{
+		"AddressNetwork",
+		"GET",
+		"/address/network/{address}",
+		AddressNetwork,
+	},
 	Route{
 		"NetworkMap",
 		"Get",
@@ -60,6 +69,36 @@ func NewUser(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintln(w, "new user added: ", newUser.ID)
 }
 */
+func AllAddresses(w http.ResponseWriter, r *http.Request) {
+	ipFilter(w, r)
+
+	nodes := []NodeModel{}
+	iter := nodeCollection.Find(bson.M{}).Limit(10000).Iter()
+	err := iter.All(&nodes)
+
+	//convert []resp struct to json
+	jsonNodes, err := json.Marshal(nodes)
+	check(err)
+
+	fmt.Fprintln(w, string(jsonNodes))
+}
+func AddressNetwork(w http.ResponseWriter, r *http.Request) {
+	ipFilter(w, r)
+
+	vars := mux.Vars(r)
+	address := vars["address"]
+	if address == "undefined" {
+		fmt.Fprintln(w, "not valid address")
+	} else {
+		network := addressTree(address)
+
+		//convert []resp struct to json
+		jNetwork, err := json.Marshal(network)
+		check(err)
+
+		fmt.Fprintln(w, string(jNetwork))
+	}
+}
 func NetworkMap(w http.ResponseWriter, r *http.Request) {
 	ipFilter(w, r)
 

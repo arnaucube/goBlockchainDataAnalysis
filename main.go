@@ -55,6 +55,10 @@ func main() {
 			color.Blue("starting to explore blockchain")
 			explore(client, config.GenesisBlock)
 		}
+		/*if os.Args[1] == "-tree" {
+			color.Blue("starting to make tree")
+			addressTree(client, "fY3HZxu7HFKRcYzVSTXRZpAJMP4qba2oR6")
+		}*/
 	}
 
 	// Get the current block count.

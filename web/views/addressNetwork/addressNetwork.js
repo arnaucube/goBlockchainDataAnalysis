@@ -1,16 +1,17 @@
 'use strict';
 
-angular.module('app.network', ['ngRoute'])
+angular.module('app.addressNetwork', ['ngRoute'])
 
     .config(['$routeProvider', function($routeProvider) {
-        $routeProvider.when('/network', {
-            templateUrl: 'views/network/network.html',
-            controller: 'NetworkCtrl'
+        $routeProvider.when('/addressNetwork', {
+            templateUrl: 'views/addressNetwork/addressNetwork.html',
+            controller: 'AddressNetworkCtrl'
         });
     }])
 
-    .controller('NetworkCtrl', function($scope, $http, $routeParams) {
+    .controller('AddressNetworkCtrl', function($scope, $http, $routeParams) {
         $scope.data = [];
+        $scope.addresses;
         $scope.nodes = [];
         $scope.edges = [];
         $scope.selectedNode = {};
@@ -61,18 +62,28 @@ angular.module('app.network', ['ngRoute'])
                 //console.log('click event, getNodeAt returns: ' + this.getNodeAt(params.pointer.DOM));
             });
         };
-
-        $http.get(urlapi + 'map')
+        $http.get(urlapi + 'alladdresses')
             .then(function(data, status, headers, config) {
                 console.log('data success');
                 console.log(data);
-
-                $scope.nodes = data.data.nodes;
-                $scope.edges = data.data.edges;
-                $scope.showMap();
+                $scope.addresses = data.data;
             }, function(data, status, headers, config) {
                 console.log('data error');
             });
+
+        $scope.getAddressNetwork = function(address) {
+            console.log(address);
+            $http.get(urlapi + 'address/network/' + address.id)
+                .then(function(data, status, headers, config) {
+                    console.log('data success');
+                    console.log(data);
+                    $scope.nodes = data.data.nodes;
+                    $scope.edges = data.data.edges;
+                    $scope.showMap();
+                }, function(data, status, headers, config) {
+                    console.log('data error');
+                });
+        };
 
 
         $scope.focusNode = function(node) {

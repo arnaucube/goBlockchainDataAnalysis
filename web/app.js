@@ -11,6 +11,7 @@ angular.module('webApp', [
     'app.navbar',
     'app.main',
     'app.network',
+    'app.addressNetwork',
     'app.sankey'
 ]).
 config(['$locationProvider', '$routeProvider', function($locationProvider, $routeProvider) {

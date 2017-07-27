@@ -25,11 +25,12 @@ type NodeModel struct {
 }
 
 type EdgeModel struct {
-	Txid   string  `json:"txid"`
-	From   string  `json:"from"`
-	To     string  `json:"to"`
-	Label  float64 `json:"label"`
-	Arrows string  `json:"arrows"`
+	Txid        string  `json:"txid"`
+	From        string  `json:"from"`
+	To          string  `json:"to"`
+	Label       float64 `json:"label"`
+	Arrows      string  `json:"arrows"`
+	BlockHeight int64   `json:"blockheight"`
 }
 type NetworkModel struct {
 	Nodes []NodeModel `json:"nodes"`
