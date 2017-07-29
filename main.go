@@ -16,6 +16,8 @@ import (
 var blockCollection *mgo.Collection
 var nodeCollection *mgo.Collection
 var edgeCollection *mgo.Collection
+var dateCountCollection *mgo.Collection
+var hourCountCollection *mgo.Collection
 
 func main() {
 	//read goBlockchainDataAbalysis config
@@ -28,6 +30,8 @@ func main() {
 	blockCollection = getCollection(session, "blocks")
 	nodeCollection = getCollection(session, "nodes")
 	edgeCollection = getCollection(session, "edges")
+	dateCountCollection = getCollection(session, "dateCounts")
+	hourCountCollection = getCollection(session, "hourCounts")
 
 	// create new client instance
 	client, err := btcrpcclient.New(&btcrpcclient.ConnConfig{

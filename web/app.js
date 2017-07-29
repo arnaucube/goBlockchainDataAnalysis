@@ -12,7 +12,8 @@ angular.module('webApp', [
     'app.main',
     'app.network',
     'app.addressNetwork',
-    'app.sankey'
+    'app.sankey',
+    'app.dateAnalysis'
 ]).
 config(['$locationProvider', '$routeProvider', function($locationProvider, $routeProvider) {
         $locationProvider.hashPrefix('!');

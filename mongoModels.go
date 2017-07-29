@@ -53,3 +53,17 @@ type SankeyModel struct {
 	Nodes []SankeyNodeModel `json:"nodes"`
 	Links []SankeyLinkModel `json:"links"`
 }
+
+type HourCountModel struct {
+	Hour  string `json:"hour"`
+	Count int    `json:"count"`
+}
+type HourAnalysisResp struct {
+	Labels []string `json:"labels"`
+	Data   []int    `json:"data"`
+}
+type DateCountModel struct {
+	Time  int64  `json:"time"`
+	Date  string `json:"date"`
+	Count int    `json:"count"`
+}

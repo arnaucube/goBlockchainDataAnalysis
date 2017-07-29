@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"sort"
 
 	"gopkg.in/mgo.v2/bson"
 
@@ -42,6 +43,12 @@ var routes = Routes{
 		"Get",
 		"/map",
 		NetworkMap,
+	},
+	Route{
+		"GetHourAnalysis",
+		"Get",
+		"/houranalysis",
+		GetHourAnalysis,
 	},
 	/*
 		Route{
@@ -200,3 +207,26 @@ func SelectItem(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintln(w, "user: "+userid+", selects item: "+itemid)
 }
 */
+func GetHourAnalysis(w http.ResponseWriter, r *http.Request) {
+	ipFilter(w, r)
+
+	hourAnalysis := []HourCountModel{}
+	iter := hourCountCollection.Find(bson.M{}).Limit(10000).Iter()
+	err := iter.All(&hourAnalysis)
+
+	//sort by hour
+	sort.Slice(hourAnalysis, func(i, j int) bool {
+		return hourAnalysis[i].Hour < hourAnalysis[j].Hour
+	})
+
+	var resp HourAnalysisResp
+	for _, d := range hourAnalysis {
+		resp.Labels = append(resp.Labels, d.Hour)
+		resp.Data = append(resp.Data, d.Count)
+	}
+
+	//convert []resp struct to json
+	jsonResp, err := json.Marshal(resp)
+	check(err)
+	fmt.Fprintln(w, string(jsonResp))
+}
