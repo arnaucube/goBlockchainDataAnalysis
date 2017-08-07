@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -20,6 +19,7 @@ var dateCountCollection *mgo.Collection
 var hourCountCollection *mgo.Collection
 
 func main() {
+	savelog()
 	//read goBlockchainDataAbalysis config
 	readConfig("config.json")
 
@@ -33,50 +33,46 @@ func main() {
 	dateCountCollection = getCollection(session, "dateCounts")
 	hourCountCollection = getCollection(session, "hourCounts")
 
-	// create new client instance
-	client, err := btcrpcclient.New(&btcrpcclient.ConnConfig{
-		HTTPPostMode: true,
-		DisableTLS:   true,
-		Host:         config.Host + ":" + config.Port,
-		User:         config.User,
-		Pass:         config.Pass,
-	}, nil)
-	if err != nil {
-		log.Fatalf("error creating new btc client: %v", err)
-	}
-
-	// list accounts
-	accounts, err := client.ListAccounts()
-	if err != nil {
-		log.Fatalf("error listing accounts: %v", err)
-	}
-	// iterate over accounts (map[string]btcutil.Amount) and write to stdout
-	for label, amount := range accounts {
-		log.Printf("%s: %s", label, amount)
-	}
 	if len(os.Args) > 1 {
 		if os.Args[1] == "-explore" {
+			// create new client instance
+			client, err := btcrpcclient.New(&btcrpcclient.ConnConfig{
+				HTTPPostMode: true,
+				DisableTLS:   true,
+				Host:         config.Host + ":" + config.Port,
+				User:         config.User,
+				Pass:         config.Pass,
+			}, nil)
+			if err != nil {
+				log.Fatalf("error creating new btc client: %v", err)
+			}
+
+			// list accounts
+			accounts, err := client.ListAccounts()
+			if err != nil {
+				log.Fatalf("error listing accounts: %v", err)
+			}
+			// iterate over accounts (map[string]btcutil.Amount) and write to stdout
+			for label, amount := range accounts {
+				log.Printf("%s: %s", label, amount)
+			}
 			color.Blue("starting to explore blockchain")
 			explore(client, config.GenesisBlock)
-		}
-		/*if os.Args[1] == "-tree" {
-			color.Blue("starting to make tree")
-			addressTree(client, "fY3HZxu7HFKRcYzVSTXRZpAJMP4qba2oR6")
-		}*/
-	}
 
-	// Get the current block count.
-	blockCount, err := client.GetBlockCount()
-	if err != nil {
-		log.Fatal(err)
+			// Get the current block count.
+			blockCount, err := client.GetBlockCount()
+			if err != nil {
+				log.Fatal(err)
+			}
+			log.Printf("Block count: %d", blockCount)
+		}
 	}
-	log.Printf("Block count: %d", blockCount)
 
 	//http server start
 	readServerConfig("./serverConfig.json")
-	color.Green("server running")
-	fmt.Print("port: ")
-	color.Green(serverConfig.ServerPort)
+	log.Println("server running")
+	log.Print("port: ")
+	log.Println(serverConfig.ServerPort)
 	router := NewRouter()
 
 	headersOk := handlers.AllowedHeaders([]string{"X-Requested-With", "Access-Control-Allow-Origin"})

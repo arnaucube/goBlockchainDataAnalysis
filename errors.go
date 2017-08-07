@@ -1,9 +1,9 @@
 package main
 
-import "fmt"
+import "log"
 
 func check(err error) {
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 	}
 }

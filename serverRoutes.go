@@ -27,6 +27,12 @@ var routes = Routes{
 		AllAddresses,
 	},
 	Route{
+		"GetLastTx",
+		"Get",
+		"/lasttx",
+		GetLastTx,
+	},
+	Route{
 		"AddressNetwork",
 		"GET",
 		"/address/network/{address}",
@@ -50,14 +56,6 @@ var routes = Routes{
 		"/houranalysis",
 		GetHourAnalysis,
 	},
-	/*
-		Route{
-			"SelectItem",
-			"GET",
-			"/selectItem/{userid}/{itemid}",
-			SelectItem,
-		},
-	*/
 }
 
 //ROUTES
@@ -94,6 +92,19 @@ func AllAddresses(w http.ResponseWriter, r *http.Request) {
 	check(err)
 
 	fmt.Fprintln(w, string(jsonNodes))
+}
+func GetLastTx(w http.ResponseWriter, r *http.Request) {
+	ipFilter(w, r)
+
+	nodes := []NodeModel{}
+	err := nodeCollection.Find(bson.M{}).Limit(10).Sort("-$natural").All(&nodes)
+	check(err)
+
+	//convert []resp struct to json
+	jNodes, err := json.Marshal(nodes)
+	check(err)
+
+	fmt.Fprintln(w, string(jNodes))
 }
 func AddressNetwork(w http.ResponseWriter, r *http.Request) {
 	ipFilter(w, r)

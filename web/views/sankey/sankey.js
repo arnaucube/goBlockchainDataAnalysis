@@ -10,7 +10,7 @@ angular.module('app.sankey', ['ngRoute', 'ngSankey'])
     }])
 
     .controller('SankeyCtrl', function($scope, $http, $routeParams) {
-
+        $scope.selectedAddress = "";
         $scope.options = {
             chart: '#sankeyChart',
             width: 960,
@@ -36,6 +36,9 @@ angular.module('app.sankey', ['ngRoute', 'ngSankey'])
             });
         $scope.getAddressSankey = function(address) {
             console.log(address);
+            $scope.selectedAddress = address.id;
+            $scope.data.nodes = [];
+            $scope.data.links = [];
             $http.get(urlapi + 'address/sankey/' + address.id)
                 .then(function(data, status, headers, config) {
                     console.log('data success');
@@ -43,6 +46,7 @@ angular.module('app.sankey', ['ngRoute', 'ngSankey'])
                     $scope.data.nodes = data.data.nodes;
                     $scope.data.links = data.data.links;
                     console.log($scope.data);
+                    d3.selectAll("svg > *").remove();
                     let chart = new d3.sankeyChart(data.data, $scope.options);
                     //$scope.data = data.data;
                 }, function(data, status, headers, config) {

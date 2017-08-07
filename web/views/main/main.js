@@ -10,5 +10,14 @@ angular.module('app.main', ['ngRoute'])
 }])
 
 .controller('MainCtrl', function($scope, $http) {
-    
+    $scope.addresses = [];
+    $http.get(urlapi + 'lasttx')
+        .then(function(data, status, headers, config) {
+            console.log('data success');
+            console.log(data);
+
+            $scope.addresses = data.data;
+        }, function(data, status, headers, config) {
+            console.log('data error');
+        });
 });
