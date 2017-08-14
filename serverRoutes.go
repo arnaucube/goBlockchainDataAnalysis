@@ -27,6 +27,12 @@ var routes = Routes{
 		AllAddresses,
 	},
 	Route{
+		"GetLastAddr",
+		"Get",
+		"/lastaddr",
+		GetLastAddr,
+	},
+	Route{
 		"GetLastTx",
 		"Get",
 		"/lasttx",
@@ -93,7 +99,7 @@ func AllAddresses(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Fprintln(w, string(jsonNodes))
 }
-func GetLastTx(w http.ResponseWriter, r *http.Request) {
+func GetLastAddr(w http.ResponseWriter, r *http.Request) {
 	ipFilter(w, r)
 
 	nodes := []NodeModel{}
@@ -105,6 +111,19 @@ func GetLastTx(w http.ResponseWriter, r *http.Request) {
 	check(err)
 
 	fmt.Fprintln(w, string(jNodes))
+}
+func GetLastTx(w http.ResponseWriter, r *http.Request) {
+	ipFilter(w, r)
+
+	edges := []EdgeModel{}
+	err := edgeCollection.Find(bson.M{}).Limit(10).Sort("-$natural").All(&edges)
+	check(err)
+
+	//convert []resp struct to json
+	jsonData, err := json.Marshal(edges)
+	check(err)
+
+	fmt.Fprintln(w, string(jsonData))
 }
 func AddressNetwork(w http.ResponseWriter, r *http.Request) {
 	ipFilter(w, r)
@@ -125,7 +144,6 @@ func AddressNetwork(w http.ResponseWriter, r *http.Request) {
 }
 func AddressSankey(w http.ResponseWriter, r *http.Request) {
 	ipFilter(w, r)
-
 	vars := mux.Vars(r)
 	address := vars["address"]
 	if address == "undefined" {

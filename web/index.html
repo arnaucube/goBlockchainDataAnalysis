@@ -14,48 +14,25 @@
     <link rel="stylesheet" href="bower_components/components-font-awesome/css/font-awesome.min.css">
 
 
+    <link href="css/style.css" rel="stylesheet">
     <link href="css/colors.css" rel="stylesheet">
 
     <!-- IF using Sass (run gulp sass first), then uncomment below and remove the CSS includes above
     <link href="css/ionic.app.css" rel="stylesheet">
     -->
-    <style type="text/css">
-        #mynetwork {
-            /*background: black;*/
-        }
-
-        .o-height600 {
-            max-height: 600px!important;
-        }
-
-        .o-height500 {
-            max-height: 500px!important;
-        }
-
-        .o-height300 {
-            max-height: 300px!important;
-        }
-
-        .o-overflowScroll {
-            /*max-height: 600px;*/
-            overflow-y: scroll;
-        }
-
-        .o-mouseoverGrey {
-            background: white;
-            cursor: pointer;
-        }
-
-        .o-mouseoverGrey:hover {
-            background: #cccccc;
-        }
-    </style>
 </head>
 
-<body ng-app="webApp">
+<body ng-app="webApp" style="overflow-x:scroll;">
     <div ng-include="'views/navbar.html'"></div>
+    <div class="row" style="padding-right:10px;">
+        <div class="col-md-2">
+            <div ng-include="'views/sidebar.html'"></div>
+        </div>
+        <div class="col-md-10">
+            <div ng-view></div>
+        </div>
+    </div>
 
-    <div ng-view></div>
 
 
 

@@ -2,21 +2,10 @@
 blockchain data analysis, written in Go
 
 
-![goBlockchainDataAnalysis](https://raw.githubusercontent.com/arnaucode/goBlockchainDataAnalysis/master/goBlockchainDataAnalysis01.png "goBlockchainDataAnalysis")
-
-
-![goBlockchainDataAnalysis](https://raw.githubusercontent.com/arnaucode/goBlockchainDataAnalysis/master/goBlockchainDataAnalysis02.png "goBlockchainDataAnalysis")
-
-
-![goBlockchainDataAnalysis](https://raw.githubusercontent.com/arnaucode/goBlockchainDataAnalysis/master/goBlockchainDataAnalysis05.png "goBlockchainDataAnalysis")
-
-
-![goBlockchainDataAnalysis](https://raw.githubusercontent.com/arnaucode/goBlockchainDataAnalysis/master/goBlockchainDataAnalysis04.png "goBlockchainDataAnalysis")
-
 ### Install
-1. Nodejs & NPM https://nodejs.org/
+1. Nodejs & NPM https://nodejs.org/ --> to serve the web, not necessary if the web files are in a webserver
 2. MongoDB https://www.mongodb.com/
-3. Faircoin wallet https://download.faircoin.world/
+3. Faircoin wallet https://download.faircoin.world/, or the Cryptocurrency desired wallet
 4. goBlockchainDataAnalysis https://github.com/arnaucode/goBlockchainDataAnalysis
 
 ### Configure
@@ -54,6 +43,7 @@ sudo service mongod start
 ```
 ./faircoind -txindex -reindex-chainstate
 ```
+Wait until the entire blockchain is downloaded.
 
 3. Run explorer, to fill the database
 ```
@@ -80,3 +70,18 @@ Webapp will run on 127.0.0.1:8080
 - Frontend
     - AngularJS https://angularjs.org/
     - Angular-Bootstrap-Material https://tilwinjoy.github.io/angular-bootstrap-material
+
+
+### Some screenshots
+
+
+![goBlockchainDataAnalysis](https://raw.githubusercontent.com/arnaucode/goBlockchainDataAnalysis/master/goBlockchainDataAnalysis05.png "goBlockchainDataAnalysis")
+
+
+![goBlockchainDataAnalysis](https://raw.githubusercontent.com/arnaucode/goBlockchainDataAnalysis/master/goBlockchainDataAnalysis01.png "goBlockchainDataAnalysis")
+
+
+![goBlockchainDataAnalysis](https://raw.githubusercontent.com/arnaucode/goBlockchainDataAnalysis/master/goBlockchainDataAnalysis02.png "goBlockchainDataAnalysis")
+
+
+![goBlockchainDataAnalysis](https://raw.githubusercontent.com/arnaucode/goBlockchainDataAnalysis/master/goBlockchainDataAnalysis04.png "goBlockchainDataAnalysis")

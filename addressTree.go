@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+
 	"gopkg.in/mgo.v2/bson"
 )
 
@@ -19,7 +21,6 @@ func upTree(address string, network NetworkModel) NetworkModel {
 	edges := []EdgeModel{}
 	err = edgeCollection.Find(bson.M{"to": address}).All(&edges)
 	check(err)
-
 	for _, e := range edges {
 		if edgeInEdges(network.Edges, e) == false {
 			network.Edges = append(network.Edges, e)
@@ -31,6 +32,7 @@ func upTree(address string, network NetworkModel) NetworkModel {
 			check(err)
 		*/
 
+		fmt.Println(e.From + " - " + e.To)
 		if e.From != e.To {
 			upNetwork = upTree(e.From, network)
 			for _, upN := range upNetwork.Nodes {

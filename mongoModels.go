@@ -22,6 +22,7 @@ type NodeModel struct {
 	Group string `json:"group"`
 	Value int    `json:"value"`
 	Shape string `json:"shape"`
+	Type  string `json:"type"`
 }
 
 type EdgeModel struct {

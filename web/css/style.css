@@ -1,0 +1,39 @@
+#mynetwork {
+    /*background: black;*/
+}
+
+.o-height600 {
+    max-height: 600px!important;
+}
+
+.o-height500 {
+    max-height: 500px!important;
+}
+
+.o-height300 {
+    max-height: 300px!important;
+}
+
+.o-overflowScroll {
+    /*max-height: 600px;*/
+    overflow-y: scroll;
+}
+
+.o-mouseoverGrey {
+    background: white;
+    cursor: pointer;
+}
+
+.o-mouseoverGrey:hover {
+    background: #cccccc;
+}
+
+
+/* sidebar */
+.o_sidebar a{
+    color: white;
+}
+.o_sidebar a:hover{
+    background: #9E9E9E!important;
+    color: white;
+}

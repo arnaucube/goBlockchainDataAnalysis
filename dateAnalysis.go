@@ -16,13 +16,13 @@ func timeToDate(blockTime int64) string {
 		panic(err)
 	}
 	tm := time.Unix(i, 0)
-	fmt.Println(tm)
+	//fmt.Println(tm)
 	stringDate := tm.String()
-	fmt.Println(stringDate)
+	//fmt.Println(stringDate)
 	return stringDate
 }
 func hourAnalysis(e EdgeModel, blockTime int64) {
-	fmt.Println(blockTime)
+	//fmt.Println(blockTime)
 	date := timeToDate(blockTime)
 	date_hour := strings.Split(date, " ")[1]
 	hour := strings.Split(date_hour, ":")[0]

@@ -26,7 +26,7 @@ func explore(client *btcrpcclient.Client, blockHash string) {
 		block, err := client.GetBlockVerbose(bh)
 		check(err)
 
-		if block.Height > 160 {
+		if block.Height > 0 {
 			for k, txHash := range block.Tx {
 				if k > 0 {
 					realBlocks++
@@ -42,12 +42,25 @@ func explore(client *btcrpcclient.Client, blockHash string) {
 					tx, err := client.GetRawTransactionVerbose(th)
 					check(err)
 
+					//save Tx
+					var nTx NodeModel
+					nTx.Id = txHash
+					nTx.Label = txHash
+					nTx.Title = txHash
+					nTx.Group = strconv.FormatInt(block.Height, 10)
+					nTx.Value = 1
+					nTx.Shape = "square"
+					nTx.Type = "tx"
+					saveNode(nodeCollection, nTx)
+
 					var originAddresses []string
 					var outputAddresses []string
+					var outputAmount []float64
 					for _, Vo := range tx.Vout {
 						//if Vo.Value > 0 {
 						for _, outputAddr := range Vo.ScriptPubKey.Addresses {
 							outputAddresses = append(outputAddresses, outputAddr)
+							outputAmount = append(outputAmount, Vo.Value)
 							var n2 NodeModel
 							n2.Id = outputAddr
 							n2.Label = outputAddr
@@ -55,6 +68,7 @@ func explore(client *btcrpcclient.Client, blockHash string) {
 							n2.Group = strconv.FormatInt(block.Height, 10)
 							n2.Value = 1
 							n2.Shape = "dot"
+							n2.Type = "address"
 							saveNode(nodeCollection, n2)
 						}
 						//}
@@ -71,25 +85,35 @@ func explore(client *btcrpcclient.Client, blockHash string) {
 								n1.Id = originAddr
 								n1.Label = originAddr
 								n1.Title = originAddr
-								n1.Group = string(block.Height)
+								n1.Group = strconv.FormatInt(block.Height, 10)
 								n1.Value = 1
 								n1.Shape = "dot"
+								n1.Type = "address"
 								saveNode(nodeCollection, n1)
 
-								for _, outputAddr := range outputAddresses {
-									var e EdgeModel
-									e.From = originAddr
-									e.To = outputAddr
-									e.Label = txVi.Vout[Vi.Vout].Value
-									e.Txid = tx.Txid
-									e.Arrows = "to"
-									e.BlockHeight = block.Height
-									saveEdge(edgeCollection, e)
+								for k, outputAddr := range outputAddresses {
+									var eIn EdgeModel
+									eIn.From = originAddr
+									eIn.To = txHash
+									eIn.Label = txVi.Vout[Vi.Vout].Value
+									eIn.Txid = tx.Txid
+									eIn.Arrows = "to"
+									eIn.BlockHeight = block.Height
+									saveEdge(edgeCollection, eIn)
+
+									var eOut EdgeModel
+									eOut.From = txHash
+									eOut.To = outputAddr
+									eOut.Label = outputAmount[k]
+									eOut.Txid = tx.Txid
+									eOut.Arrows = "to"
+									eOut.BlockHeight = block.Height
+									saveEdge(edgeCollection, eOut)
 
 									//date analysis
 									//dateAnalysis(e, tx.Time)
 									//hour analysis
-									hourAnalysis(e, tx.Time)
+									hourAnalysis(eIn, tx.Time)
 								}
 							}
 						} else {
