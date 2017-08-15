@@ -120,7 +120,7 @@ func nodeInNodes(nodes []NodeModel, node NodeModel) bool {
 }
 func edgeInEdges(edges []EdgeModel, edge EdgeModel) bool {
 	for _, e := range edges {
-		if e.From == edge.From && e.To == edge.To {
+		if e.From == edge.From && e.To == edge.To && e.Label == edge.Label && e.BlockHeight == edge.BlockHeight {
 			return true
 		}
 	}

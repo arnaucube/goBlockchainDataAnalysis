@@ -26,7 +26,7 @@ func explore(client *btcrpcclient.Client, blockHash string) {
 		block, err := client.GetBlockVerbose(bh)
 		check(err)
 
-		if block.Height > 0 {
+		if block.Height > config.StartFromBlock {
 			for k, txHash := range block.Tx {
 				if k > 0 {
 					realBlocks++

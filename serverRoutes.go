@@ -90,7 +90,7 @@ func AllAddresses(w http.ResponseWriter, r *http.Request) {
 	ipFilter(w, r)
 
 	nodes := []NodeModel{}
-	iter := nodeCollection.Find(bson.M{}).Limit(10000).Iter()
+	iter := nodeCollection.Find(bson.M{"type": "address"}).Limit(10000).Iter()
 	err := iter.All(&nodes)
 
 	//convert []resp struct to json

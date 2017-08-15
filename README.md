@@ -1,6 +1,13 @@
 # goBlockchainDataAnalysis
 blockchain data analysis, written in Go
 
+#### Not finished - ToDo list
+- Backend
+    - Network Address generation avoiding infinite relation loops
+    - Sankey Address generation without loops
+- Frontend
+    - After Sankey visualization, go to Network Address visualization and render without Sankey dots
+
 
 ### Install
 1. Nodejs & NPM https://nodejs.org/ --> to serve the web, not necessary if the web files are in a webserver
@@ -74,6 +81,9 @@ Webapp will run on 127.0.0.1:8080
 
 ### Some screenshots
 
+![goBlockchainDataAnalysis](https://raw.githubusercontent.com/arnaucode/goBlockchainDataAnalysis/master/goBlockchainDataAnalysis00.png "goBlockchainDataAnalysis")
+
+![goBlockchainDataAnalysis](https://raw.githubusercontent.com/arnaucode/goBlockchainDataAnalysis/master/goBlockchainDataAnalysis06.png "goBlockchainDataAnalysis")
 
 ![goBlockchainDataAnalysis](https://raw.githubusercontent.com/arnaucode/goBlockchainDataAnalysis/master/goBlockchainDataAnalysis05.png "goBlockchainDataAnalysis")
 

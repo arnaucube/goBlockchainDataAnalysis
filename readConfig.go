@@ -6,12 +6,13 @@ import (
 )
 
 type Config struct {
-	User         string `json:"user"`
-	Pass         string `json:"pass"`
-	Host         string `json:"host"`
-	Port         string `json:"port"`
-	GenesisTx    string `json:"genesisTx"`
-	GenesisBlock string `json:"genesisBlock"`
+	User           string `json:"user"`
+	Pass           string `json:"pass"`
+	Host           string `json:"host"`
+	Port           string `json:"port"`
+	GenesisTx      string `json:"genesisTx"`
+	GenesisBlock   string `json:"genesisBlock"`
+	StartFromBlock int64  `json:"startFromBlock"`
 }
 
 var config Config

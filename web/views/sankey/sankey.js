@@ -13,7 +13,7 @@ angular.module('app.sankey', ['ngRoute', 'ngSankey'])
         $scope.selectedAddress = "";
         $scope.options = {
             chart: '#sankeyChart',
-            width: 960,
+            width: 800,
             height: 500,
             margin: {top: 1, right: 1, bottom: 6, left: 1},
             node: {width: 15, padding :10, showValue: false},
