@@ -7,10 +7,14 @@ blockchain data analysis, written in Go
     - Sankey Address generation without loops
 - Frontend
     - After Sankey visualization, go to Network Address visualization and render without Sankey dots
-
+- Both
+    - Tx/day
+    - Tx volume
+    - Block size
+    - Blockchain size
 
 ### Install
-1. Nodejs & NPM https://nodejs.org/ --> to serve the web, not necessary if the web files are in a webserver
+1. Nodejs & NPM https://nodejs.org/ --> to get npm packages for the web
 2. MongoDB https://www.mongodb.com/
 3. Faircoin wallet https://download.faircoin.world/, or the Cryptocurrency desired wallet
 4. goBlockchainDataAnalysis https://github.com/arnaucode/goBlockchainDataAnalysis
@@ -61,8 +65,11 @@ Wait until the entire blockchain is downloaded.
 ```
 ./goBlockchainDataAnalysis
 ```
+Webapp will run on 127.0.0.1:8080
 
-4. Run the webserver, in the /web directory
+4. ADDITIONAL - Run the webserver, directly from the /web directory
+This can be useful if need to deploy the API server in one machine and the webserver in other.
+In the /web directory:
 ```
 npm start
 ```
@@ -83,7 +90,7 @@ Webapp will run on 127.0.0.1:8080
 
 ![goBlockchainDataAnalysis](https://raw.githubusercontent.com/arnaucode/goBlockchainDataAnalysis/master/goBlockchainDataAnalysis00.png "goBlockchainDataAnalysis")
 
-![goBlockchainDataAnalysis](https://raw.githubusercontent.com/arnaucode/goBlockchainDataAnalysis/master/goBlockchainDataAnalysis06.png "goBlockchainDataAnalysis")
+![goBlockchainDataAnalysis](https://raw.githubusercontent.com/arnaucode/goBlockchainDataAnalysis/master/goBlockchainDataAnalysis06.gif "goBlockchainDataAnalysis")
 
 ![goBlockchainDataAnalysis](https://raw.githubusercontent.com/arnaucode/goBlockchainDataAnalysis/master/goBlockchainDataAnalysis05.png "goBlockchainDataAnalysis")
 

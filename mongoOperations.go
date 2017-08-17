@@ -12,7 +12,7 @@ import (
 
 //MongoConfig stores the configuration of mongodb to connect
 type MongoConfig struct {
-	Ip       string `json:"ip"`
+	IP       string `json:"ip"`
 	Database string `json:"database"`
 }
 
@@ -28,7 +28,7 @@ func readMongodbConfig(path string) {
 }
 
 func getSession() (*mgo.Session, error) {
-	session, err := mgo.Dial("mongodb://" + mongoConfig.Ip)
+	session, err := mgo.Dial("mongodb://" + mongoConfig.IP)
 	if err != nil {
 		panic(err)
 	}

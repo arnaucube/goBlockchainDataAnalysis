@@ -67,6 +67,8 @@ func main() {
 			log.Printf("Block count: %d", blockCount)
 		}
 	}
+	//run thw webserver
+	go webserver()
 
 	//http server start
 	readServerConfig("./serverConfig.json")
@@ -81,4 +83,10 @@ func main() {
 	log.Fatal(http.ListenAndServe(":"+serverConfig.ServerPort, handlers.CORS(originsOk, headersOk, methodsOk)(router)))
 	//log.Fatal(http.ListenAndServe(":"+serverConfig.ServerPort, router))
 
+}
+
+func webserver() {
+	log.Println("webserver in port " + serverConfig.WebServerPort)
+	http.Handle("/", http.FileServer(http.Dir("./web")))
+	http.ListenAndServe(":"+serverConfig.WebServerPort, nil)
 }

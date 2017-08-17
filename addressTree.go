@@ -2,11 +2,12 @@ package main
 
 import (
 	"fmt"
+	"log"
+
+	"github.com/fatih/color"
 
 	"gopkg.in/mgo.v2/bson"
 )
-
-var upLevelEdge EdgeModel
 
 func upTree(address string, network NetworkModel) NetworkModel {
 	var upNetwork NetworkModel
@@ -33,16 +34,22 @@ func upTree(address string, network NetworkModel) NetworkModel {
 			err := nodeCollection.Find(bson.M{"id": }).All(&edges)
 			check(err)
 		*/
+		endBranch := false
 		edgeUpCheck := EdgeModel{}
 		err := edgeCollection.Find(bson.M{"to": e.From}).One(&edgeUpCheck)
-		check(err)
+		if err != nil {
+			log.Println(err)
+			color.Blue("not found")
+			endBranch = true
+		}
 
 		//need to be fixed when there is a bucle between the addresses (A-->B, B-->C, C-->A)
 		fmt.Println(e.From + " - " + e.To)
 		//if e.From != e.To && e.From != upLevelEdge.To && e.To != upLevelEdge.From {
 		//if e.From != e.To {
-		if edgeInEdges(network.Edges, edgeUpCheck) == false {
-			upLevelEdge = e
+		fmt.Println(endBranch)
+		fmt.Println(edgeInEdges(network.Edges, edgeUpCheck))
+		if edgeInEdges(network.Edges, edgeUpCheck) == false && endBranch == false {
 			upNetwork = upTree(e.From, network)
 			for _, upN := range upNetwork.Nodes {
 				if nodeInNodes(network.Nodes, upN) == false {

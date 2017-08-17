@@ -71,8 +71,10 @@ angular.module('app.addressNetwork', ['ngRoute'])
                 console.log('data error');
             });
 
+            $scope.selectedAddress="";
         $scope.getAddressNetwork = function(address) {
             console.log(address);
+            $scope.selectedAddress=address;
             $http.get(urlapi + 'address/network/' + address.id)
                 .then(function(data, status, headers, config) {
                     console.log('data success');

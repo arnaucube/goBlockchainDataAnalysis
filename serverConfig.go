@@ -20,10 +20,11 @@ type Route struct {
 
 //server config
 type ServerConfig struct {
-	ServerIP   string   `json:"serverIP"`
-	ServerPort string   `json:"serverPort"`
-	AllowedIPs []string `json:"allowedIPs"`
-	BlockedIPs []string `json:"blockedIPs"`
+	ServerIP      string   `json:"serverIP"`
+	ServerPort    string   `json:"serverPort"`
+	WebServerPort string   `json:"webserverPort"`
+	AllowedIPs    []string `json:"allowedIPs"`
+	BlockedIPs    []string `json:"blockedIPs"`
 }
 
 var serverConfig ServerConfig
