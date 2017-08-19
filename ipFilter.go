@@ -11,13 +11,13 @@ func ipFilter(w http.ResponseWriter, r *http.Request) {
 	var err error
 	fmt.Println(r.RemoteAddr)
 	reqIP := strings.Split(r.RemoteAddr, ":")[0]
-	for _, ip := range serverConfig.BlockedIPs {
+	for _, ip := range config.Server.BlockedIPs {
 		if reqIP == ip {
 			err = errors.New("ip not allowed to post images")
 		}
 	}
 
-	for _, ip := range serverConfig.AllowedIPs {
+	for _, ip := range config.Server.AllowedIPs {
 		if reqIP != ip {
 			err = errors.New("ip not allowed to post images")
 		}

@@ -1,34 +1,14 @@
 package main
 
 import (
-	"encoding/json"
-	"fmt"
-	"io/ioutil"
 	"log"
 
 	mgo "gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 )
 
-//MongoConfig stores the configuration of mongodb to connect
-type MongoConfig struct {
-	IP       string `json:"ip"`
-	Database string `json:"database"`
-}
-
-var mongoConfig MongoConfig
-
-func readMongodbConfig(path string) {
-	file, e := ioutil.ReadFile(path)
-	if e != nil {
-		fmt.Println("error:", e)
-	}
-	content := string(file)
-	json.Unmarshal([]byte(content), &mongoConfig)
-}
-
 func getSession() (*mgo.Session, error) {
-	session, err := mgo.Dial("mongodb://" + mongoConfig.IP)
+	session, err := mgo.Dial("mongodb://" + config.Mongodb.IP)
 	if err != nil {
 		panic(err)
 	}
@@ -44,9 +24,11 @@ func getSession() (*mgo.Session, error) {
 }
 func getCollection(session *mgo.Session, collection string) *mgo.Collection {
 
-	c := session.DB(mongoConfig.Database).C(collection)
+	c := session.DB(config.Mongodb.Database).C(collection)
 	return c
 }
+
+/*
 func saveBlock(c *mgo.Collection, block BlockModel) {
 	//first, check if the item already exists
 	result := BlockModel{}
@@ -63,6 +45,7 @@ func saveBlock(c *mgo.Collection, block BlockModel) {
 	}
 
 }
+*/
 
 func getAllNodes() ([]NodeModel, error) {
 	result := []NodeModel{}
@@ -125,4 +108,35 @@ func edgeInEdges(edges []EdgeModel, edge EdgeModel) bool {
 		}
 	}
 	return false
+}
+func saveAddress(address AddressModel) {
+
+	result := AddressModel{}
+	err := addressCollection.Find(bson.M{"hash": address.Hash}).One(&result)
+	if err != nil {
+		//address not found, so let's add a new entry
+		err = addressCollection.Insert(address)
+		check(err)
+	}
+}
+func saveTx(tx TxModel) {
+
+	result := TxModel{}
+	err := txCollection.Find(bson.M{"txid": tx.Txid}).One(&result)
+	if err != nil {
+		//tx not found, so let's add a new entry
+		err = txCollection.Insert(tx)
+		check(err)
+	}
+}
+
+func saveBlock(block BlockModel) {
+
+	result := BlockModel{}
+	err := blockCollection.Find(bson.M{"hash": block.Hash}).One(&result)
+	if err != nil {
+		//block not found, so let's add a new entry
+		err = blockCollection.Insert(block)
+		check(err)
+	}
 }

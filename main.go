@@ -4,6 +4,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 
 	mgo "gopkg.in/mgo.v2"
 
@@ -13,6 +14,8 @@ import (
 )
 
 var blockCollection *mgo.Collection
+var txCollection *mgo.Collection
+var addressCollection *mgo.Collection
 var nodeCollection *mgo.Collection
 var edgeCollection *mgo.Collection
 var dateCountCollection *mgo.Collection
@@ -24,10 +27,12 @@ func main() {
 	readConfig("config.json")
 
 	//connect with mongodb
-	readMongodbConfig("./mongodbConfig.json")
+	//readMongodbConfig("./mongodbConfig.json")
 	session, err := getSession()
 	check(err)
 	blockCollection = getCollection(session, "blocks")
+	txCollection = getCollection(session, "txs")
+	addressCollection = getCollection(session, "address")
 	nodeCollection = getCollection(session, "nodes")
 	edgeCollection = getCollection(session, "edges")
 	dateCountCollection = getCollection(session, "dateCounts")
@@ -57,7 +62,10 @@ func main() {
 				log.Printf("%s: %s", label, amount)
 			}
 			color.Blue("starting to explore blockchain")
+			start := time.Now()
 			explore(client, config.GenesisBlock)
+			log.Println("blockchain exploration finished, time:")
+			log.Println(time.Since(start))
 
 			// Get the current block count.
 			blockCount, err := client.GetBlockCount()
@@ -71,22 +79,22 @@ func main() {
 	go webserver()
 
 	//http server start
-	readServerConfig("./serverConfig.json")
+	//readServerConfig("./serverConfig.json")
 	log.Println("server running")
 	log.Print("port: ")
-	log.Println(serverConfig.ServerPort)
+	log.Println(config.Server.ServerPort)
 	router := NewRouter()
 
 	headersOk := handlers.AllowedHeaders([]string{"X-Requested-With", "Access-Control-Allow-Origin"})
 	originsOk := handlers.AllowedOrigins([]string{"*"})
 	methodsOk := handlers.AllowedMethods([]string{"GET", "HEAD", "POST", "PUT", "OPTIONS"})
-	log.Fatal(http.ListenAndServe(":"+serverConfig.ServerPort, handlers.CORS(originsOk, headersOk, methodsOk)(router)))
+	log.Fatal(http.ListenAndServe(":"+config.Server.ServerPort, handlers.CORS(originsOk, headersOk, methodsOk)(router)))
 	//log.Fatal(http.ListenAndServe(":"+serverConfig.ServerPort, router))
 
 }
 
 func webserver() {
-	log.Println("webserver in port " + serverConfig.WebServerPort)
+	log.Println("webserver in port " + config.Server.WebServerPort)
 	http.Handle("/", http.FileServer(http.Dir("./web")))
-	http.ListenAndServe(":"+serverConfig.WebServerPort, nil)
+	http.ListenAndServe(":"+config.Server.WebServerPort, nil)
 }

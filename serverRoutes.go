@@ -102,25 +102,25 @@ func AllAddresses(w http.ResponseWriter, r *http.Request) {
 func GetLastAddr(w http.ResponseWriter, r *http.Request) {
 	ipFilter(w, r)
 
-	nodes := []NodeModel{}
-	err := nodeCollection.Find(bson.M{}).Limit(10).Sort("-$natural").All(&nodes)
+	addresses := []AddressModel{}
+	err := addressCollection.Find(bson.M{}).Limit(10).Sort("-$natural").All(&addresses)
 	check(err)
 
 	//convert []resp struct to json
-	jNodes, err := json.Marshal(nodes)
+	jsonResp, err := json.Marshal(addresses)
 	check(err)
 
-	fmt.Fprintln(w, string(jNodes))
+	fmt.Fprintln(w, string(jsonResp))
 }
 func GetLastTx(w http.ResponseWriter, r *http.Request) {
 	ipFilter(w, r)
 
-	edges := []EdgeModel{}
-	err := edgeCollection.Find(bson.M{}).Limit(10).Sort("-$natural").All(&edges)
+	txs := []TxModel{}
+	err := txCollection.Find(bson.M{}).Limit(10).Sort("-$natural").All(&txs)
 	check(err)
 
 	//convert []resp struct to json
-	jsonData, err := json.Marshal(edges)
+	jsonData, err := json.Marshal(txs)
 	check(err)
 
 	fmt.Fprintln(w, string(jsonData))

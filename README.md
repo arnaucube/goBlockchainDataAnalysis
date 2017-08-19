@@ -2,16 +2,9 @@
 blockchain data analysis, written in Go
 
 #### Not finished - ToDo list
-- Backend
-    - Network Address generation avoiding infinite relation loops
-    - Sankey Address generation without loops
-- Frontend
-    - After Sankey visualization, go to Network Address visualization and render without Sankey dots
-- Both
-    - Tx/day
-    - Tx volume
-    - Block size
-    - Blockchain size
+To Do list in DevelopmentNotes.md https://github.com/arnaucode/goBlockchainDataAnalysis/blob/master/DevelopmentNotes.md
+
+## Instructions
 
 ### Install
 1. Nodejs & NPM https://nodejs.org/ --> to get npm packages for the web
@@ -22,7 +15,7 @@ blockchain data analysis, written in Go
 ### Configure
 - Wallet /home/user/.faircoin2/faircoin.conf:
 ```
-rpcuser=usernamerpc
+rpcuser=faircoinrpc
 rpcpassword=password
 rpcport=3021
 rpcworkqueue=2000
@@ -34,12 +27,26 @@ rpcallowip=127.0.0.1
 - goBlockchainDataAnalysis/config.json:
 ```json
 {
-    "user": "usernamerpc",
+    "user": "faircoinrpc",
     "pass": "password",
     "host": "127.0.0.1",
     "port": "3021",
-    "genesisTx": "7c27ade2c28e67ed3077f8f77b8ea6d36d4f5eba04c099be3c9faa9a4a04c046",
-    "genesisBlock": "beed44fa5e96150d95d56ebd5d2625781825a9407a5215dd7eda723373a0a1d7"
+	"genesisTx": "7c27ade2c28e67ed3077f8f77b8ea6d36d4f5eba04c099be3c9faa9a4a04c046",
+	"genesisBlock": "beed44fa5e96150d95d56ebd5d2625781825a9407a5215dd7eda723373a0a1d7",
+    "startFromBlock": 160,
+    "server": {
+        "serverIP": "127.0.0.1",
+        "serverPort": "3014",
+        "webServerPort": "8080",
+        "allowedIPs": [
+            "127.0.0.1"
+        ],
+        "blockedIPs": []
+    },
+    "mongodb": {
+        "ip": "127.0.0.1",
+        "database": "goBlockchainDataAnalysis"
+    }
 }
 ```
 
@@ -87,18 +94,19 @@ Webapp will run on 127.0.0.1:8080
 
 
 ### Some screenshots
+Some screenshots can be old, and can contain errors.
 
-![goBlockchainDataAnalysis](https://raw.githubusercontent.com/arnaucode/goBlockchainDataAnalysis/master/goBlockchainDataAnalysis00.png "goBlockchainDataAnalysis")
+![goBlockchainDataAnalysis](https://raw.githubusercontent.com/arnaucode/goBlockchainDataAnalysis/master/screenshots/goBlockchainDataAnalysis00.png "goBlockchainDataAnalysis")
 
-![goBlockchainDataAnalysis](https://raw.githubusercontent.com/arnaucode/goBlockchainDataAnalysis/master/goBlockchainDataAnalysis06.gif "goBlockchainDataAnalysis")
+![goBlockchainDataAnalysis](https://raw.githubusercontent.com/arnaucode/goBlockchainDataAnalysis/master/screenshots/goBlockchainDataAnalysis06.gif "goBlockchainDataAnalysis")
 
-![goBlockchainDataAnalysis](https://raw.githubusercontent.com/arnaucode/goBlockchainDataAnalysis/master/goBlockchainDataAnalysis05.png "goBlockchainDataAnalysis")
-
-
-![goBlockchainDataAnalysis](https://raw.githubusercontent.com/arnaucode/goBlockchainDataAnalysis/master/goBlockchainDataAnalysis01.png "goBlockchainDataAnalysis")
+![goBlockchainDataAnalysis](https://raw.githubusercontent.com/arnaucode/goBlockchainDataAnalysis/master/screenshots/goBlockchainDataAnalysis05.png "goBlockchainDataAnalysis")
 
 
-![goBlockchainDataAnalysis](https://raw.githubusercontent.com/arnaucode/goBlockchainDataAnalysis/master/goBlockchainDataAnalysis02.png "goBlockchainDataAnalysis")
+![goBlockchainDataAnalysis](https://raw.githubusercontent.com/arnaucode/goBlockchainDataAnalysis/master/screenshots/goBlockchainDataAnalysis01.png "goBlockchainDataAnalysis")
 
 
-![goBlockchainDataAnalysis](https://raw.githubusercontent.com/arnaucode/goBlockchainDataAnalysis/master/goBlockchainDataAnalysis04.png "goBlockchainDataAnalysis")
+![goBlockchainDataAnalysis](https://raw.githubusercontent.com/arnaucode/goBlockchainDataAnalysis/master/screenshots/goBlockchainDataAnalysis02.png "goBlockchainDataAnalysis")
+
+
+![goBlockchainDataAnalysis](https://raw.githubusercontent.com/arnaucode/goBlockchainDataAnalysis/master/screenshots/goBlockchainDataAnalysis04.png "goBlockchainDataAnalysis")

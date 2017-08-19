@@ -1,9 +1,6 @@
 package main
 
 import (
-	"encoding/json"
-	"fmt"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"time"
@@ -16,26 +13,6 @@ type Route struct {
 	Method      string
 	Pattern     string
 	HandlerFunc http.HandlerFunc
-}
-
-//server config
-type ServerConfig struct {
-	ServerIP      string   `json:"serverIP"`
-	ServerPort    string   `json:"serverPort"`
-	WebServerPort string   `json:"webserverPort"`
-	AllowedIPs    []string `json:"allowedIPs"`
-	BlockedIPs    []string `json:"blockedIPs"`
-}
-
-var serverConfig ServerConfig
-
-func readServerConfig(path string) {
-	file, err := ioutil.ReadFile(path)
-	if err != nil {
-		fmt.Println("error: ", err)
-	}
-	content := string(file)
-	json.Unmarshal([]byte(content), &serverConfig)
 }
 
 func Logger(inner http.Handler, name string) http.Handler {

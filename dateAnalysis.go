@@ -24,8 +24,8 @@ func timeToDate(blockTime int64) string {
 func hourAnalysis(e EdgeModel, blockTime int64) {
 	//fmt.Println(blockTime)
 	date := timeToDate(blockTime)
-	date_hour := strings.Split(date, " ")[1]
-	hour := strings.Split(date_hour, ":")[0]
+	dateHour := strings.Split(date, " ")[1]
+	hour := strings.Split(dateHour, ":")[0]
 
 	hourCount := HourCountModel{}
 	err := hourCountCollection.Find(bson.M{"hour": hour}).One(&hourCount)

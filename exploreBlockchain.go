@@ -10,14 +10,14 @@ import (
 
 func explore(client *btcrpcclient.Client, blockHash string) {
 	var realBlocks int
-	var nOrigin NodeModel
+	/*var nOrigin NodeModel
 	nOrigin.Id = "origin"
 	nOrigin.Label = "origin"
 	nOrigin.Title = "origin"
 	nOrigin.Group = "origin"
 	nOrigin.Value = 1
 	nOrigin.Shape = "dot"
-	saveNode(nodeCollection, nOrigin)
+	saveNode(nodeCollection, nOrigin)*/
 
 	for blockHash != "" {
 		//generate hash from string
@@ -27,6 +27,17 @@ func explore(client *btcrpcclient.Client, blockHash string) {
 		check(err)
 
 		if block.Height > config.StartFromBlock {
+			var newBlock BlockModel
+			newBlock.Hash = block.Hash
+			newBlock.Confirmations = block.Confirmations
+			newBlock.Size = block.Size
+			newBlock.Height = block.Height
+			//newBlock.Amount = block.Amount
+			//newBlock.Fee = block.Fee
+			newBlock.PreviousHash = block.PreviousHash
+			newBlock.NextHash = block.NextHash
+			newBlock.Time = block.Time
+
 			for k, txHash := range block.Tx {
 				if k > 0 {
 					realBlocks++
@@ -39,25 +50,24 @@ func explore(client *btcrpcclient.Client, blockHash string) {
 
 					th, err := chainhash.NewHashFromStr(txHash)
 					check(err)
-					tx, err := client.GetRawTransactionVerbose(th)
+					blockTx, err := client.GetRawTransactionVerbose(th)
 					check(err)
 
 					//save Tx
-					var nTx NodeModel
-					nTx.Id = txHash
-					nTx.Label = txHash
-					nTx.Title = txHash
-					nTx.Group = strconv.FormatInt(block.Height, 10)
-					nTx.Value = 1
-					nTx.Shape = "square"
-					nTx.Type = "tx"
-					saveNode(nodeCollection, nTx)
+					var nodeTx NodeModel
+					nodeTx.Id = txHash
+					nodeTx.Label = txHash
+					nodeTx.Title = txHash
+					nodeTx.Group = strconv.FormatInt(block.Height, 10)
+					nodeTx.Value = 1
+					nodeTx.Shape = "square"
+					nodeTx.Type = "tx"
+					saveNode(nodeCollection, nodeTx)
 
 					var originAddresses []string
 					var outputAddresses []string
 					var outputAmount []float64
-					for _, Vo := range tx.Vout {
-						//if Vo.Value > 0 {
+					for _, Vo := range blockTx.Vout {
 						for _, outputAddr := range Vo.ScriptPubKey.Addresses {
 							outputAddresses = append(outputAddresses, outputAddr)
 							outputAmount = append(outputAmount, Vo.Value)
@@ -70,17 +80,36 @@ func explore(client *btcrpcclient.Client, blockHash string) {
 							n2.Shape = "dot"
 							n2.Type = "address"
 							saveNode(nodeCollection, n2)
+
+							//Address
+							var addr AddressModel
+							addr.Hash = outputAddr
+							addr.InBittrex = false
+							saveAddress(addr)
 						}
-						//}
 					}
-					for _, Vi := range tx.Vin {
+					for _, Vi := range blockTx.Vin {
 						th, err := chainhash.NewHashFromStr(Vi.Txid)
 						check(err)
 						txVi, err := client.GetRawTransactionVerbose(th)
 						check(err)
 						if len(txVi.Vout[Vi.Vout].ScriptPubKey.Addresses) > 0 {
+							//add tx to newBlock
+							newBlock.Tx = append(newBlock.Tx, blockTx.Txid)
+
+							//Tx save
+							var newTx TxModel
+							newTx.Hex = blockTx.Hex
+							newTx.Txid = blockTx.Txid
+							newTx.Hash = blockTx.Hash
+							newTx.BlockHash = block.Hash
+							newTx.BlockHeight = strconv.FormatInt(block.Height, 10)
+							newTx.Time = blockTx.Time
 							for _, originAddr := range txVi.Vout[Vi.Vout].ScriptPubKey.Addresses {
 								originAddresses = append(originAddresses, originAddr)
+
+								newTx.From = originAddr
+
 								var n1 NodeModel
 								n1.Id = originAddr
 								n1.Label = originAddr
@@ -91,12 +120,18 @@ func explore(client *btcrpcclient.Client, blockHash string) {
 								n1.Type = "address"
 								saveNode(nodeCollection, n1)
 
+								//Address
+								var addr AddressModel
+								addr.Hash = originAddr
+								addr.InBittrex = false
+								saveAddress(addr)
+
 								for k, outputAddr := range outputAddresses {
 									var eIn EdgeModel
 									eIn.From = originAddr
 									eIn.To = txHash
 									eIn.Label = txVi.Vout[Vi.Vout].Value
-									eIn.Txid = tx.Txid
+									eIn.Txid = blockTx.Txid
 									eIn.Arrows = "to"
 									eIn.BlockHeight = block.Height
 									saveEdge(edgeCollection, eIn)
@@ -105,7 +140,7 @@ func explore(client *btcrpcclient.Client, blockHash string) {
 									eOut.From = txHash
 									eOut.To = outputAddr
 									eOut.Label = outputAmount[k]
-									eOut.Txid = tx.Txid
+									eOut.Txid = blockTx.Txid
 									eOut.Arrows = "to"
 									eOut.BlockHeight = block.Height
 									saveEdge(edgeCollection, eOut)
@@ -113,9 +148,13 @@ func explore(client *btcrpcclient.Client, blockHash string) {
 									//date analysis
 									//dateAnalysis(e, tx.Time)
 									//hour analysis
-									hourAnalysis(eIn, tx.Time)
+									hourAnalysis(eIn, blockTx.Time)
+
+									newTx.To = outputAddr
+
 								}
 							}
+							saveTx(newTx)
 						} else {
 							originAddresses = append(originAddresses, "origin")
 						}
@@ -127,6 +166,7 @@ func explore(client *btcrpcclient.Client, blockHash string) {
 					fmt.Println(len(outputAddresses))
 				}
 			}
+			saveBlock(newBlock)
 		}
 		//set the next block
 		blockHash = block.NextHash
