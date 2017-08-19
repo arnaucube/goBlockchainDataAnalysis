@@ -3,12 +3,18 @@ package main
 import (
 	"fmt"
 	"strconv"
-	"strings"
 	"time"
 
 	"gopkg.in/mgo.v2/bson"
 )
 
+func map24hours() map[int]int {
+	h := make(map[int]int)
+	for i := 0; i < 24; i++ {
+		h[i] = 0
+	}
+	return h
+}
 func decomposeDate(blockTime int64) (int, int, int, int) {
 	/*i, err := strconv.ParseInt(blockTime, 10, 64)
 	if err != nil {
@@ -38,16 +44,17 @@ func timeToDate(blockTime int64) string {
 }
 func hourAnalysis(e EdgeModel, blockTime int64) {
 	//fmt.Println(blockTime)
-	date := timeToDate(blockTime)
+	/*date := timeToDate(blockTime)
 	dateHour := strings.Split(date, " ")[1]
-	hour := strings.Split(dateHour, ":")[0]
+	hourString := strings.Split(dateHour, ":")[0]*/
+	_, _, _, hour := decomposeDate(blockTime)
 
-	hourCount := HourCountModel{}
+	hourCount := ChartCountModel{}
 	err := hourCountCollection.Find(bson.M{"hour": hour}).One(&hourCount)
 	if err != nil {
 		//date not yet in DB
-		var hourCount HourCountModel
-		hourCount.Hour = hour
+		var hourCount ChartCountModel
+		hourCount.Elem = hour
 		hourCount.Count = 1
 		err = hourCountCollection.Insert(hourCount)
 		check(err)

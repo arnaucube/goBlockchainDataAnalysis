@@ -84,11 +84,11 @@ type SankeyModel struct {
 	Links []SankeyLinkModel `json:"links"`
 }
 
-type HourCountModel struct {
-	Hour  string `json:"hour"`
-	Count int    `json:"count"`
+type ChartCountModel struct {
+	Elem  int `json:"elem"`
+	Count int `json:"count"`
 }
-type HourAnalysisResp struct {
+type ChartAnalysisResp struct {
 	Labels []string `json:"labels"`
 	Data   []int    `json:"data"`
 }
