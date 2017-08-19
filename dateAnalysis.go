@@ -9,6 +9,21 @@ import (
 	"gopkg.in/mgo.v2/bson"
 )
 
+func decomposeDate(blockTime int64) (int, int, int, int) {
+	/*i, err := strconv.ParseInt(blockTime, 10, 64)
+	if err != nil {
+		panic(err)
+	}*/
+	i := blockTime
+	year := time.Unix(i, 0).Year()
+	month := time.Unix(i, 0).Month()
+	day := time.Unix(i, 0).Day()
+	hour := time.Unix(i, 0).Hour()
+	return year, int(month), day, hour
+}
+func unixTimeToTime(blockTime int64) time.Time {
+	return time.Unix(blockTime, 0)
+}
 func timeToDate(blockTime int64) string {
 	stringTime := strconv.FormatInt(blockTime, 10)
 	i, err := strconv.ParseInt(stringTime, 10, 64)

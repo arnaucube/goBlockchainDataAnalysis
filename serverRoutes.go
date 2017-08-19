@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"net/http"
 	"sort"
+	"strconv"
+	"time"
 
 	"gopkg.in/mgo.v2/bson"
 
@@ -57,10 +59,16 @@ var routes = Routes{
 		NetworkMap,
 	},
 	Route{
-		"GetHourAnalysis",
+		"GetTotalHourAnalysis",
 		"Get",
-		"/houranalysis",
-		GetHourAnalysis,
+		"/totalhouranalysis",
+		GetTotalHourAnalysis,
+	},
+	Route{
+		"GetLast24HourAnalysis",
+		"Get",
+		"/last24hour",
+		GetLast24HourAnalysis,
 	},
 }
 
@@ -199,44 +207,7 @@ func NetworkMap(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintln(w, string(jNetwork))
 }
 
-/*
-func SelectItem(w http.ResponseWriter, r *http.Request) {
-	ipFilter(w, r)
-	vars := mux.Vars(r)
-	userid := vars["userid"]
-	itemid := vars["itemid"]
-	//find item
-	item, err := getItemById(itemid)
-	if err != nil {
-		fmt.Fprintln(w, "item "+itemid+" not found")
-	}
-
-	//find user
-	user, err := getUserById(userid)
-	if err != nil {
-		fmt.Fprintln(w, "user "+userid+" not found")
-	}
-
-	//increase TActed in item
-	item.TActed = item.TActed + 1
-
-	//save item
-	item, err = updateItem(item)
-	check(err)
-	fmt.Println(item)
-
-	//add item to []Actions of user
-	user.Actions = append(user.Actions, itemid)
-
-	//save user
-	user, err = updateUser(user)
-	check(err)
-	fmt.Println(user)
-
-	fmt.Fprintln(w, "user: "+userid+", selects item: "+itemid)
-}
-*/
-func GetHourAnalysis(w http.ResponseWriter, r *http.Request) {
+func GetTotalHourAnalysis(w http.ResponseWriter, r *http.Request) {
 	ipFilter(w, r)
 
 	hourAnalysis := []HourCountModel{}
@@ -250,6 +221,46 @@ func GetHourAnalysis(w http.ResponseWriter, r *http.Request) {
 
 	var resp HourAnalysisResp
 	for _, d := range hourAnalysis {
+		resp.Labels = append(resp.Labels, d.Hour)
+		resp.Data = append(resp.Data, d.Count)
+	}
+
+	//convert []resp struct to json
+	jsonResp, err := json.Marshal(resp)
+	check(err)
+	fmt.Fprintln(w, string(jsonResp))
+}
+
+func GetLast24HourAnalysis(w http.ResponseWriter, r *http.Request) {
+	ipFilter(w, r)
+
+	fromDate := time.Now().AddDate(0, 0, -1)
+	toDate := time.Now()
+
+	txs := []TxModel{}
+	err := txCollection.Find(bson.M{
+		"datet": bson.M{
+			"$gt": fromDate,
+			"$lt": toDate,
+		},
+	}).Sort("-$natural").All(&txs)
+	check(err)
+
+	hourFrequencies := make(map[int]int)
+	for _, tx := range txs {
+		hourFrequencies[tx.Date.Hour]++
+	}
+	var hourCount []HourCountModel
+	for hour, frequency := range hourFrequencies {
+		hourCount = append(hourCount, HourCountModel{strconv.Itoa(hour), frequency})
+	}
+	//sort by hour
+	sort.Slice(hourCount, func(i, j int) bool {
+		return hourCount[i].Hour < hourCount[j].Hour
+	})
+
+	var resp HourAnalysisResp
+	for _, d := range hourCount {
 		resp.Labels = append(resp.Labels, d.Hour)
 		resp.Data = append(resp.Data, d.Count)
 	}

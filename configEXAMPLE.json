@@ -1,0 +1,22 @@
+{
+    "user": "faircoinrpc",
+    "pass": "password",
+    "host": "127.0.0.1",
+    "port": "3021",
+	"genesisTx": "7c27ade2c28e67ed3077f8f77b8ea6d36d4f5eba04c099be3c9faa9a4a04c046",
+	"genesisBlock": "beed44fa5e96150d95d56ebd5d2625781825a9407a5215dd7eda723373a0a1d7",
+    "startFromBlock": 0,
+    "server": {
+        "serverIP": "127.0.0.1",
+        "serverPort": "3014",
+        "webServerPort": "8080",
+        "allowedIPs": [
+            "127.0.0.1"
+        ],
+        "blockedIPs": []
+    },
+    "mongodb": {
+        "ip": "127.0.0.1",
+        "database": "goBlockchainDataAnalysis"
+    }
+}

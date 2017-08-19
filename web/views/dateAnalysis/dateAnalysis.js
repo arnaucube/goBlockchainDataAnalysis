@@ -10,18 +10,35 @@ angular.module('app.dateAnalysis', ['ngRoute', 'chart.js'])
     }])
 
     .controller('DateAnalysisCtrl', function($scope, $http, $routeParams) {
-        $scope.data=[];
-        $scope.labels=[];
+        $scope.totalhour={
+            data: [],
+            labels: []
+        };
 
-        $http.get(urlapi + 'houranalysis')
+        $http.get(urlapi + 'totalhouranalysis')
             .then(function(data, status, headers, config) {
                 console.log('data success');
                 console.log(data);
 
-                $scope.data = data.data.data;
-                $scope.labels=data.data.labels;
+                $scope.totalhour.data = data.data.data;
+                $scope.totalhour.labels=data.data.labels;
             }, function(data, status, headers, config) {
                 console.log('data error');
             });
 
+            //date analysis
+        $scope.last24hour= {
+            data:[],
+            labels:  []
+        };
+        $http.get(urlapi + 'last24hour')
+            .then(function(data, status, headers, config) {
+                console.log('data success');
+                console.log(data);
+
+                $scope.last24hour.data = data.data.data;
+                $scope.last24hour.labels = data.data.labels;
+            }, function(data, status, headers, config) {
+                console.log('data error');
+            });
     });

@@ -37,7 +37,7 @@ angular.module('app.main', ['ngRoute'])
         //date analysis
         $scope.data = [];
         $scope.labels = [];
-        $http.get(urlapi + 'houranalysis')
+        $http.get(urlapi + 'last24hour')
             .then(function(data, status, headers, config) {
                 console.log('data success');
                 console.log(data);

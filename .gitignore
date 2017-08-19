@@ -15,6 +15,6 @@
 
 
 /*.conf
-/*.json
+config.json
 *.mp4
 logs

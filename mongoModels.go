@@ -1,29 +1,32 @@
 package main
 
+import "time"
+
 type AddressModel struct {
 	Hash      string  `json:"hash"`
 	Amount    float64 `json:"amount"`
 	InBittrex bool    `json:"inbittrex"`
 }
 type DateModel struct {
-	Hour        string  `json:"hour"`
-	Day         string  `json:"day"`
-	Month       string  `json:"month"`
-	Amount      float64 `json:"amount"`
+	Hour  int `json:"hour"`
+	Day   int `json:"day"`
+	Month int `json:"month"`
+	Year  int `json:"year"`
+	/*Amount      float64 `json:"amount"`
 	BlockHash   string  `json:"blockhash"`
-	BlockHeight string  `json:"blockheight"`
+	BlockHeight string  `json:"blockheight"`*/
 }
 type TxModel struct {
-	Hex         string  `json:"hex"`
-	Txid        string  `json:"txid"`
-	Hash        string  `json:"hash"`
-	From        string  `json:"from"` //hash of address
-	To          string  `json:"to"`   //hash of address
-	Amount      float64 `json:"amount"`
-	BlockHash   string  `json:"blockhash"`
-	BlockHeight string  `json:"blockheight"`
-	Time        int64   `json:"time"`
-	DateF       string  `json:"datef"` //date formated
+	Hex         string    `json:"hex"`
+	Txid        string    `json:"txid"`
+	Hash        string    `json:"hash"`
+	From        string    `json:"from"` //hash of address
+	To          string    `json:"to"`   //hash of address
+	Amount      float64   `json:"amount"`
+	BlockHash   string    `json:"blockhash"`
+	BlockHeight string    `json:"blockheight"`
+	Time        int64     `json:"time"`
+	DateT       time.Time `json:"datef"` //date formated
 	Date        DateModel
 }
 type BlockModel struct {
@@ -33,11 +36,11 @@ type BlockModel struct {
 	Height        int64  `json:"height"`
 	//Amount        float64  `json:"amount"`
 	//Fee           float64  `json:"fee"`
-	Tx           []string `json:"txid"` //txid of the TxModel
-	PreviousHash string   `json:"previoushash"`
-	NextHash     string   `json:"nexthash"`
-	Time         int64    `json:"time"`
-	DateF        string   `json:"datef"` //date formated
+	Tx           []string  `json:"txid"` //txid of the TxModel
+	PreviousHash string    `json:"previoushash"`
+	NextHash     string    `json:"nexthash"`
+	Time         int64     `json:"time"`
+	DateT        time.Time `json:"datef"` //date formated
 	Date         DateModel
 }
 

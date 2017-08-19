@@ -33,3 +33,7 @@ other
         BlockHeight string  `json:"blockheight"`
     }
 ```
+
+- mantain connection with wallet using websockets
+
+- add 24h to hour analysis, to show also hours with 0 transactions

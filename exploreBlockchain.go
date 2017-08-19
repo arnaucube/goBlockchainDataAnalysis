@@ -37,6 +37,8 @@ func explore(client *btcrpcclient.Client, blockHash string) {
 			newBlock.PreviousHash = block.PreviousHash
 			newBlock.NextHash = block.NextHash
 			newBlock.Time = block.Time
+			newBlock.DateT = unixTimeToTime(block.Time)
+			newBlock.Date.Year, newBlock.Date.Month, newBlock.Date.Day, newBlock.Date.Hour = decomposeDate(block.Time)
 
 			for k, txHash := range block.Tx {
 				if k > 0 {
@@ -53,7 +55,7 @@ func explore(client *btcrpcclient.Client, blockHash string) {
 					blockTx, err := client.GetRawTransactionVerbose(th)
 					check(err)
 
-					//save Tx
+					//save Tx Node
 					var nodeTx NodeModel
 					nodeTx.Id = txHash
 					nodeTx.Label = txHash
@@ -105,6 +107,8 @@ func explore(client *btcrpcclient.Client, blockHash string) {
 							newTx.BlockHash = block.Hash
 							newTx.BlockHeight = strconv.FormatInt(block.Height, 10)
 							newTx.Time = blockTx.Time
+							newTx.DateT = unixTimeToTime(block.Time)
+							newTx.Date.Year, newTx.Date.Month, newTx.Date.Day, newTx.Date.Hour = decomposeDate(block.Time)
 							for _, originAddr := range txVi.Vout[Vi.Vout].ScriptPubKey.Addresses {
 								originAddresses = append(originAddresses, originAddr)
 
