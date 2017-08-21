@@ -9,19 +9,19 @@ angular.module('app.dateAnalysis', ['ngRoute', 'chart.js'])
         });
     }])
 
-    .controller('DateAnalysisCtrl', function($scope, $http, $routeParams) {
-        $scope.totalhour={
+    .controller('DateAnalysisCtrl', function($scope, $http) {
+        $scope.last7day={
             data: [],
             labels: []
         };
 
-        $http.get(urlapi + 'totalhouranalysis')
+        $http.get(urlapi + 'last7day')
             .then(function(data, status, headers, config) {
                 console.log('data success');
                 console.log(data);
 
-                $scope.totalhour.data = data.data.data;
-                $scope.totalhour.labels=data.data.labels;
+                $scope.last7day.data = data.data.data;
+                $scope.last7day.labels=data.data.labels;
             }, function(data, status, headers, config) {
                 console.log('data error');
             });
@@ -38,6 +38,22 @@ angular.module('app.dateAnalysis', ['ngRoute', 'chart.js'])
 
                 $scope.last24hour.data = data.data.data;
                 $scope.last24hour.labels = data.data.labels;
+            }, function(data, status, headers, config) {
+                console.log('data error');
+            });
+
+        $scope.last7dayhour= {
+            data:[],
+            labels:  []
+        };
+        $http.get(urlapi + 'last7dayhour')
+            .then(function(data, status, headers, config) {
+                console.log('data success');
+                console.log(data);
+
+                $scope.last7dayhour.data = data.data.data;
+                $scope.last7dayhour.labels = data.data.labels;
+                $scope.last7dayhour.series = data.data.series;
             }, function(data, status, headers, config) {
                 console.log('data error');
             });

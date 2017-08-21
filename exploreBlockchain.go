@@ -25,7 +25,6 @@ func explore(client *btcrpcclient.Client, blockHash string) {
 		check(err)
 		block, err := client.GetBlockVerbose(bh)
 		check(err)
-
 		if block.Height > config.StartFromBlock {
 			var newBlock BlockModel
 			newBlock.Hash = block.Hash
@@ -176,7 +175,7 @@ func explore(client *btcrpcclient.Client, blockHash string) {
 		blockHash = block.NextHash
 	}
 
-	fmt.Print("realBlocks (blocks with Fee and Amount values): ")
+	fmt.Print("realBlocks added (blocks with Fee and Amount values): ")
 	fmt.Println(realBlocks)
 	fmt.Println("reached the end of blockchain")
 }

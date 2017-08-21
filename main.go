@@ -4,12 +4,13 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strconv"
 	"time"
 
 	mgo "gopkg.in/mgo.v2"
+	"gopkg.in/mgo.v2/bson"
 
 	"github.com/btcsuite/btcrpcclient"
-	"github.com/fatih/color"
 	"github.com/gorilla/handlers"
 )
 
@@ -61,7 +62,7 @@ func main() {
 			for label, amount := range accounts {
 				log.Printf("%s: %s", label, amount)
 			}
-			color.Blue("starting to explore blockchain")
+			log.Println("starting to explore blockchain")
 			start := time.Now()
 			explore(client, config.GenesisBlock)
 			log.Println("blockchain exploration finished, time:")
@@ -73,6 +74,27 @@ func main() {
 				log.Fatal(err)
 			}
 			log.Printf("Block count: %d", blockCount)
+		}
+		if os.Args[1] == "-continue" {
+			// create new client instance
+			client, err := btcrpcclient.New(&btcrpcclient.ConnConfig{
+				HTTPPostMode: true,
+				DisableTLS:   true,
+				Host:         config.Host + ":" + config.Port,
+				User:         config.User,
+				Pass:         config.Pass,
+			}, nil)
+			check(err)
+			//get last block stored in mongodb
+			lastBlock := BlockModel{}
+			err = blockCollection.Find(bson.M{}).Sort("-$natural").One(&lastBlock)
+			check(err)
+			log.Println("Getting last block stored in MongoDB. Hash: " + string(lastBlock.Hash) + ", BlockHeight: " + strconv.FormatInt(lastBlock.Height, 10))
+			log.Println("continuing blockchain exploration since last block in mongodb")
+			start := time.Now()
+			explore(client, string(lastBlock.Hash))
+			log.Println("blockchain exploration finished, time:")
+			log.Println(time.Since(start))
 		}
 	}
 	//run thw webserver

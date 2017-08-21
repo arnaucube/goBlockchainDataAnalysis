@@ -92,6 +92,11 @@ type ChartAnalysisResp struct {
 	Labels []string `json:"labels"`
 	Data   []int    `json:"data"`
 }
+type ChartSeriesAnalysisResp struct {
+	Labels []string `json:"labels"`
+	Data   [][]int  `json:"data"`
+	Series []int    `json:"series"`
+}
 type DateCountModel struct {
 	Time  int64  `json:"time"`
 	Date  string `json:"date"`

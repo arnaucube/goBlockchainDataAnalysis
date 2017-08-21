@@ -76,6 +76,12 @@ var routes = Routes{
 		"/last7day",
 		GetLast7DayAnalysis,
 	},
+	Route{
+		"GetLast7DayHourAnalysis",
+		"Get",
+		"/last7dayhour",
+		GetLast7DayHourAnalysis,
+	},
 }
 
 //ROUTES
@@ -312,6 +318,52 @@ func GetLast7DayAnalysis(w http.ResponseWriter, r *http.Request) {
 		resp.Labels = append(resp.Labels, strconv.Itoa(d.Elem))
 		resp.Data = append(resp.Data, d.Count)
 	}
+
+	//convert []resp struct to json
+	jsonResp, err := json.Marshal(resp)
+	check(err)
+	fmt.Fprintln(w, string(jsonResp))
+}
+
+func GetLast7DayHourAnalysis(w http.ResponseWriter, r *http.Request) {
+	ipFilter(w, r)
+
+	var resp ChartSeriesAnalysisResp
+
+	for i := 0; i < 7; i++ {
+		fromDate := time.Now().AddDate(0, 0, -i-1)
+		toDate := time.Now().AddDate(0, 0, -i)
+		txs := []TxModel{}
+		err := txCollection.Find(bson.M{
+			"datet": bson.M{
+				"$gt": fromDate,
+				"$lt": toDate,
+			},
+		}).Sort("-$natural").All(&txs)
+		check(err)
+
+		//generate map with 24 hours
+		hourFrequencies := map24hours()
+		for _, tx := range txs {
+			hourFrequencies[tx.Date.Hour]++
+		}
+		var hourCount []ChartCountModel
+		for hour, frequency := range hourFrequencies {
+			hourCount = append(hourCount, ChartCountModel{hour, frequency})
+		}
+		//sort by hour
+		sort.Slice(hourCount, func(i, j int) bool {
+			return hourCount[i].Elem < hourCount[j].Elem
+		})
+		var dayData []int
+		for _, d := range hourCount {
+			dayData = append(dayData, d.Count)
+		}
+		resp.Series = append(resp.Series, txs[0].Date.Day)
+		resp.Data = append(resp.Data, dayData)
+	}
+	hourLabels := []string{"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23"}
+	resp.Labels = hourLabels
 
 	//convert []resp struct to json
 	jsonResp, err := json.Marshal(resp)

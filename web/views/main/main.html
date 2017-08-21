@@ -16,17 +16,19 @@
     </div>
     <div class="col-sm-4">
         <div class="panel-heading c_blueGrey300">
-            <h3 class="panel-title">Last 24 hours Tx/Hour</h3>
+            <h3 class="panel-title">Last 24 hours Tx/Hour
+            <a ng-href="#!/dateAnalysis" class="pull-right c_blueGrey300">View more</a></h3>
         </div>
         <div class="panel-body">
             <canvas id="line" class="chart chart-line" chart-data="last24hour.data" chart-labels="last24hour.labels">
             </canvas>
         </div>
         <div class="panel-heading c_blueGrey300">
-            <h3 class="panel-title">Last 7 days Tx/Day</h3>
+            <h3 class="panel-title">Last 7 days Tx/Hour
+                <a ng-href="#!/dateAnalysis" class="pull-right c_blueGrey300">View more</a></h3>
         </div>
         <div class="panel-body">
-            <canvas id="line" class="chart chart-line" chart-data="last7day.data" chart-labels="last7day.labels">
+            <canvas id="line" class="chart chart-line" chart-data="last7dayhour.data" chart-labels="last7dayhour.labels" chart-series="last7dayhour.series">
             </canvas>
         </div>
     </div>

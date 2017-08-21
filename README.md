@@ -33,7 +33,7 @@ rpcallowip=127.0.0.1
     "port": "3021",
 	"genesisTx": "7c27ade2c28e67ed3077f8f77b8ea6d36d4f5eba04c099be3c9faa9a4a04c046",
 	"genesisBlock": "beed44fa5e96150d95d56ebd5d2625781825a9407a5215dd7eda723373a0a1d7",
-    "startFromBlock": 160,
+    "startFromBlock": 0,
     "server": {
         "serverIP": "127.0.0.1",
         "serverPort": "3014",
@@ -68,10 +68,16 @@ Wait until the entire blockchain is downloaded.
 ./goBlockchainDataAnalysis -explore
 ```
 
-    3.1. The next runs, once the database have data, can just run:
+    3.1. The next runs, once the database have data and just need to add last blocks added in the blockchain, can just run:
+```
+./goBlockchainDataAnalysis -continue
+```
+    
+    3.2. If don't want to fill the database, can just run:
 ```
 ./goBlockchainDataAnalysis
 ```
+
 Webapp will run on 127.0.0.1:8080
 
 4. ADDITIONAL - Run the webserver, directly from the /web directory

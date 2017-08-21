@@ -49,17 +49,18 @@ angular.module('app.main', ['ngRoute'])
             }, function(data, status, headers, config) {
                 console.log('data error');
             });
-        $scope.last7day= {
+        $scope.last7dayhour= {
             data:[],
             labels:  []
         };
-        $http.get(urlapi + 'last7day')
+        $http.get(urlapi + 'last7dayhour')
             .then(function(data, status, headers, config) {
                 console.log('data success');
                 console.log(data);
 
-                $scope.last7day.data = data.data.data;
-                $scope.last7day.labels = data.data.labels;
+                $scope.last7dayhour.data = data.data.data;
+                $scope.last7dayhour.labels = data.data.labels;
+                $scope.last7dayhour.series = data.data.series;
             }, function(data, status, headers, config) {
                 console.log('data error');
             });
