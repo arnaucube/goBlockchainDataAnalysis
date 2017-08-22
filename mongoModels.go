@@ -102,3 +102,10 @@ type DateCountModel struct {
 	Date  string `json:"date"`
 	Count int    `json:"count"`
 }
+type StatsModel struct {
+	Title          string `json:"title"`
+	RealBlockCount int    `json:"realblockcount"`
+	BlockCount     int    `json:"blockcount"`
+	TxCount        int    `json:"txcount"`
+	AddrCount      int    `json:"addrcount"`
+}

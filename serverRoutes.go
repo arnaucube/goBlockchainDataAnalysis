@@ -23,6 +23,12 @@ var routes = Routes{
 		Index,
 	},
 	Route{
+		"Stats",
+		"Get",
+		"/stats",
+		Stats,
+	},
+	Route{
 		"AllAddresses",
 		"Get",
 		"/alladdresses",
@@ -106,6 +112,16 @@ func NewUser(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintln(w, "new user added: ", newUser.ID)
 }
 */
+func Stats(w http.ResponseWriter, r *http.Request) {
+	ipFilter(w, r)
+
+	stats := getStats()
+
+	jsonResp, err := json.Marshal(stats)
+	check(err)
+
+	fmt.Fprintln(w, string(jsonResp))
+}
 func AllAddresses(w http.ResponseWriter, r *http.Request) {
 	ipFilter(w, r)
 
@@ -154,6 +170,7 @@ func AddressNetwork(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintln(w, "not valid address")
 	} else {
 		network := addressTree(address)
+		network.Nodes[0].Shape = "triangle"
 
 		//convert []resp struct to json
 		jNetwork, err := json.Marshal(network)

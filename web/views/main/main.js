@@ -10,13 +10,28 @@ angular.module('app.main', ['ngRoute'])
     }])
 
     .controller('MainCtrl', function($scope, $http) {
+        $scope.stats = [];
+        $scope.blockProgress={
+            "width": "0%"
+        };
+        $http.get(urlapi + 'stats')
+            .then(function(data, status, headers, config) {
+                console.log(data);
+                $scope.stats = data.data;
+                var tantpercent = ($scope.stats.realblockcount/$scope.stats.blockcount)*100;
+                $scope.blockProgress={
+                    "width": tantpercent+"%"
+                };
+            }, function(data, status, headers, config) {
+                console.log('data error');
+            });
+        
+        
         //last addr
         $scope.addresses = [];
         $http.get(urlapi + 'lastaddr')
             .then(function(data, status, headers, config) {
-                console.log('data success');
                 console.log(data);
-
                 $scope.addresses = data.data;
             }, function(data, status, headers, config) {
                 console.log('data error');
@@ -26,9 +41,7 @@ angular.module('app.main', ['ngRoute'])
         $scope.txs = [];
         $http.get(urlapi + 'lasttx')
             .then(function(data, status, headers, config) {
-                console.log('data success');
                 console.log(data);
-
                 $scope.txs = data.data;
             }, function(data, status, headers, config) {
                 console.log('data error');
@@ -41,9 +54,7 @@ angular.module('app.main', ['ngRoute'])
         };
         $http.get(urlapi + 'last24hour')
             .then(function(data, status, headers, config) {
-                console.log('data success');
                 console.log(data);
-
                 $scope.last24hour.data = data.data.data;
                 $scope.last24hour.labels = data.data.labels;
             }, function(data, status, headers, config) {
@@ -55,12 +66,26 @@ angular.module('app.main', ['ngRoute'])
         };
         $http.get(urlapi + 'last7dayhour')
             .then(function(data, status, headers, config) {
-                console.log('data success');
                 console.log(data);
-
                 $scope.last7dayhour.data = data.data.data;
                 $scope.last7dayhour.labels = data.data.labels;
                 $scope.last7dayhour.series = data.data.series;
+            }, function(data, status, headers, config) {
+                console.log('data error');
+            });
+
+        $scope.last7day={
+            data: [],
+            labels: []
+        };
+
+        $http.get(urlapi + 'last7day')
+            .then(function(data, status, headers, config) {
+                console.log('data success');
+                console.log(data);
+
+                $scope.last7day.data = data.data.data;
+                $scope.last7day.labels=data.data.labels;
             }, function(data, status, headers, config) {
                 console.log('data error');
             });

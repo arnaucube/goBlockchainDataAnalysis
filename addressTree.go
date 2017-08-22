@@ -45,11 +45,7 @@ func upTree(address string, network NetworkModel) NetworkModel {
 
 		//need to be fixed when there is a bucle between the addresses (A-->B, B-->C, C-->A)
 		fmt.Println(e.From + " - " + e.To)
-		//if e.From != e.To && e.From != upLevelEdge.To && e.To != upLevelEdge.From {
-		//if e.From != e.To {
-		fmt.Println(endBranch)
-		fmt.Println(edgeInEdges(network.Edges, edgeUpCheck))
-		if edgeInEdges(network.Edges, edgeUpCheck) == false && endBranch == false {
+		if edgeInEdges(network.Edges, edgeUpCheck) == false && endBranch == false && edgeUpCheck.BlockHeight <= e.BlockHeight && e.To != edgeUpCheck.From {
 			upNetwork = upTree(e.From, network)
 			for _, upN := range upNetwork.Nodes {
 				if nodeInNodes(network.Nodes, upN) == false {

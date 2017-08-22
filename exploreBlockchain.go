@@ -5,10 +5,10 @@ import (
 	"strconv"
 
 	"github.com/btcsuite/btcd/chaincfg/chainhash"
-	"github.com/btcsuite/btcrpcclient"
+	"github.com/btcsuite/btcd/rpcclient"
 )
 
-func explore(client *btcrpcclient.Client, blockHash string) {
+func explore(client *rpcclient.Client, blockHash string) {
 	var realBlocks int
 	/*var nOrigin NodeModel
 	nOrigin.Id = "origin"
@@ -39,9 +39,23 @@ func explore(client *btcrpcclient.Client, blockHash string) {
 			newBlock.DateT = unixTimeToTime(block.Time)
 			newBlock.Date.Year, newBlock.Date.Month, newBlock.Date.Day, newBlock.Date.Hour = decomposeDate(block.Time)
 
+			//stats blocks
+			stats := getStats()
+			stats.BlockCount++
+			if len(block.Tx) > 1 {
+				stats.RealBlockCount++
+			}
+			updateStats(stats)
+
 			for k, txHash := range block.Tx {
 				if k > 0 {
 					realBlocks++
+
+					//stats txs
+					stats := getStats()
+					stats.TxCount++
+					updateStats(stats)
+
 					fmt.Print("Block Height: ")
 					fmt.Print(block.Height)
 					fmt.Print(", num of Tx: ")

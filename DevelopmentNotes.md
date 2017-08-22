@@ -2,10 +2,7 @@
 
 ## ToDo list
 
-- Sankey generation without loops
-
 - Backend
-    - Network Address generation avoiding infinite relation loops
     - Sankey Address generation without loops
 - Frontend
     - After Sankey visualization, go to Network Address visualization and render without Sankey dots
@@ -31,3 +28,5 @@ other
 ```
 
 - mantain connection with wallet using websockets
+
+- num address evolution throught time

@@ -117,6 +117,11 @@ func saveAddress(address AddressModel) {
 		//address not found, so let's add a new entry
 		err = addressCollection.Insert(address)
 		check(err)
+
+		//stats addr
+		stats := getStats()
+		stats.AddrCount++
+		updateStats(stats)
 	}
 }
 func saveTx(tx TxModel) {

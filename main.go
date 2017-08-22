@@ -10,10 +10,11 @@ import (
 	mgo "gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 
-	"github.com/btcsuite/btcrpcclient"
+	"github.com/btcsuite/btcd/rpcclient"
 	"github.com/gorilla/handlers"
 )
 
+var statsCollection *mgo.Collection
 var blockCollection *mgo.Collection
 var txCollection *mgo.Collection
 var addressCollection *mgo.Collection
@@ -31,6 +32,7 @@ func main() {
 	//readMongodbConfig("./mongodbConfig.json")
 	session, err := getSession()
 	check(err)
+	statsCollection = getCollection(session, "stats")
 	blockCollection = getCollection(session, "blocks")
 	txCollection = getCollection(session, "txs")
 	addressCollection = getCollection(session, "address")
@@ -42,7 +44,7 @@ func main() {
 	if len(os.Args) > 1 {
 		if os.Args[1] == "-explore" {
 			// create new client instance
-			client, err := btcrpcclient.New(&btcrpcclient.ConnConfig{
+			client, err := rpcclient.New(&rpcclient.ConnConfig{
 				HTTPPostMode: true,
 				DisableTLS:   true,
 				Host:         config.Host + ":" + config.Port,
@@ -77,7 +79,7 @@ func main() {
 		}
 		if os.Args[1] == "-continue" {
 			// create new client instance
-			client, err := btcrpcclient.New(&btcrpcclient.ConnConfig{
+			client, err := rpcclient.New(&rpcclient.ConnConfig{
 				HTTPPostMode: true,
 				DisableTLS:   true,
 				Host:         config.Host + ":" + config.Port,
