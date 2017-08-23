@@ -11,6 +11,8 @@ angular.module('app.main', ['ngRoute'])
 
     .controller('MainCtrl', function($scope, $http) {
         $scope.stats = [];
+        $scope.current=0;
+        $scope.max=100;
         $scope.blockProgress={
             "width": "0%"
         };
@@ -22,11 +24,12 @@ angular.module('app.main', ['ngRoute'])
                 $scope.blockProgress={
                     "width": tantpercent+"%"
                 };
+                $scope.current=80;
             }, function(data, status, headers, config) {
                 console.log('data error');
             });
-        
-        
+
+
         //last addr
         $scope.addresses = [];
         $http.get(urlapi + 'lastaddr')

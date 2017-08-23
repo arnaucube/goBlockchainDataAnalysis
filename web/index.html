@@ -24,13 +24,14 @@
     -->
 </head>
 
-<body ng-app="webApp" style="overflow-x:scroll;">
-    <div ng-include="'views/navbar.html'"></div>
+<body ng-app="webApp" style="overflow-x:hidden;">
     <div class="row" style="padding-right:10px;">
         <div class="col-md-2">
             <div ng-include="'views/sidebar.html'"></div>
         </div>
         <div class="col-md-10">
+            <!--<div ng-include="'views/navbar.html'"></div>-->
+            <br>
             <div ng-view></div>
         </div>
     </div>
@@ -51,6 +52,9 @@
 
     <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
     <script src="bower_components/angular-bootstrap-material/dist/angular-bootstrap-material.js"></script>
+
+    <!-- progressbar -->
+    <script src="bower_components/angular-svg-round-progressbar/build/roundProgress.min.js"></script>
 
     <!-- Angular Chart -->
     <script src="bower_components/chart.js/dist/Chart.min.js"></script>

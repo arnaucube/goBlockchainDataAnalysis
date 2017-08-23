@@ -8,6 +8,7 @@ angular.module('webApp', [
     'ngRoute',
     'ngMessages',
     'angularBootstrapMaterial',
+    'angular-svg-round-progressbar',
     'app.navbar',
     'app.main',
     'app.network',

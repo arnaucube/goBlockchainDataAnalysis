@@ -14,6 +14,7 @@
     "angular-bootstrap": "^2.5.0",
     "angular-messages": "^1.6.5",
     "components-font-awesome": "^4.7.0",
-    "sankeyjs": "^1.2.2"
+    "sankeyjs": "^1.2.2",
+    "angular-svg-round-progressbar": "0.4.8"
   }
 }
