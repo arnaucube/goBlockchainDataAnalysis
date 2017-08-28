@@ -30,3 +30,5 @@ other
 - mantain connection with wallet using websockets
 
 - num address evolution throught time
+
+- Error in Tx model. exploreBlockchain.go line 174

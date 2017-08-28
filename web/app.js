@@ -13,6 +13,7 @@ angular.module('webApp', [
     'app.main',
     'app.network',
     'app.addressNetwork',
+    'app.address',
     'app.sankey',
     'app.dateAnalysis'
 ]).

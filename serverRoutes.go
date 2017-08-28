@@ -53,6 +53,12 @@ var routes = Routes{
 		AddressNetwork,
 	},
 	Route{
+		"Address",
+		"GET",
+		"/address/{hash}",
+		Address,
+	},
+	Route{
 		"AddressSankey",
 		"GET",
 		"/address/sankey/{address}",
@@ -177,6 +183,36 @@ func AddressNetwork(w http.ResponseWriter, r *http.Request) {
 		check(err)
 
 		fmt.Fprintln(w, string(jNetwork))
+	}
+}
+func Address(w http.ResponseWriter, r *http.Request) {
+	ipFilter(w, r)
+
+	vars := mux.Vars(r)
+	hash := vars["hash"]
+	if hash == "undefined" {
+		fmt.Fprintln(w, "not valid hash")
+	} else {
+		address := AddressModel{}
+		err := addressCollection.Find(bson.M{"hash": hash}).One(&address)
+
+		txs := []TxModel{}
+		err = txCollection.Find(bson.M{"$or": []bson.M{bson.M{"from": hash}, bson.M{"to": hash}}}).All(&txs)
+		address.Txs = txs
+
+		for _, tx := range address.Txs {
+			blocks := []BlockModel{}
+			err = blockCollection.Find(bson.M{"hash": tx.BlockHash}).All(&blocks)
+			for _, block := range blocks {
+				address.Blocks = append(address.Blocks, block)
+			}
+		}
+
+		//convert []resp struct to json
+		jsonResp, err := json.Marshal(address)
+		check(err)
+
+		fmt.Fprintln(w, string(jsonResp))
 	}
 }
 func AddressSankey(w http.ResponseWriter, r *http.Request) {
@@ -376,8 +412,10 @@ func GetLast7DayHourAnalysis(w http.ResponseWriter, r *http.Request) {
 		for _, d := range hourCount {
 			dayData = append(dayData, d.Count)
 		}
-		resp.Series = append(resp.Series, txs[0].Date.Day)
-		resp.Data = append(resp.Data, dayData)
+		if len(txs) > 0 {
+			resp.Series = append(resp.Series, txs[0].Date.Day)
+			resp.Data = append(resp.Data, dayData)
+		}
 	}
 	hourLabels := []string{"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23"}
 	resp.Labels = hourLabels

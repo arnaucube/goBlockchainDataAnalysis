@@ -171,6 +171,7 @@ func explore(client *rpcclient.Client, blockHash string) {
 
 								}
 							}
+							//ERROR! need to make array with all Vin and array with Vout, with addresses and amount values
 							saveTx(newTx)
 						} else {
 							originAddresses = append(originAddresses, "origin")

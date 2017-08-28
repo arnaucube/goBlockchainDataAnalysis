@@ -3,9 +3,11 @@ package main
 import "time"
 
 type AddressModel struct {
-	Hash      string  `json:"hash"`
-	Amount    float64 `json:"amount"`
-	InBittrex bool    `json:"inbittrex"`
+	Hash      string       `json:"hash"`
+	Amount    float64      `json:"amount"`
+	InBittrex bool         `json:"inbittrex"`
+	Txs       []TxModel    `json:"txs"`
+	Blocks    []BlockModel `json:"blocks"`
 }
 type DateModel struct {
 	Hour  int `json:"hour"`
@@ -26,7 +28,7 @@ type TxModel struct {
 	BlockHash   string    `json:"blockhash"`
 	BlockHeight string    `json:"blockheight"`
 	Time        int64     `json:"time"`
-	DateT       time.Time `json:"datef"` //date formated
+	DateT       time.Time `json:"datet"` //date formated
 	Date        DateModel
 }
 type BlockModel struct {
@@ -40,7 +42,7 @@ type BlockModel struct {
 	PreviousHash string    `json:"previoushash"`
 	NextHash     string    `json:"nexthash"`
 	Time         int64     `json:"time"`
-	DateT        time.Time `json:"datef"` //date formated
+	DateT        time.Time `json:"datet"` //date formated
 	Date         DateModel
 }
 

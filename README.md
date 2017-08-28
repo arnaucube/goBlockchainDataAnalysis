@@ -72,7 +72,7 @@ Wait until the entire blockchain is downloaded.
 ```
 ./goBlockchainDataAnalysis -continue
 ```
-    
+
     3.2. If don't want to fill the database, can just run:
 ```
 ./goBlockchainDataAnalysis
@@ -101,6 +101,8 @@ Webapp will run on 127.0.0.1:8080
 
 ### Some screenshots
 Some screenshots can be old, and can contain errors.
+
+![goBlockchainDataAnalysis](https://raw.githubusercontent.com/arnaucode/goBlockchainDataAnalysis/master/screenshots/goBlockchainDataAnalysis00_new.png "goBlockchainDataAnalysis")
 
 ![goBlockchainDataAnalysis](https://raw.githubusercontent.com/arnaucode/goBlockchainDataAnalysis/master/screenshots/goBlockchainDataAnalysis00.png "goBlockchainDataAnalysis")
 

@@ -1,0 +1,29 @@
+
+/* bootstrap overwrite dark */
+
+body {
+    background: #424242!important;
+}
+.panel-heading {
+    border-radius: 0px!important;
+}
+.panel-title a {
+    background: rgba(0,0,0,0)!important;
+    text-decoration: none;
+}
+.panel-body {
+    background: #212121;
+    color: #ffffff;
+}
+.list-group-item {
+    background: rgba(0,0,0,0)!important;
+}
+.list-group-item:hover {
+    background: rgba(255, 255, 255, 0.2)!important;
+}
+.list-group-item p, a{
+    color: #ffffff!important;
+}
+.table-hover  tbody  tr:hover {
+  background-color: rgba(245, 245, 245, 0.2)!important;
+}

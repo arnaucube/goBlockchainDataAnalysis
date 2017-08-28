@@ -1,0 +1,56 @@
+<div class="row">
+    <div class="col-sm-4">
+        <div class="panel">
+            <div class="panel-heading c_deepPurpleG300to500">
+                <h3 class="panel-title">{{address.hash}}</h3>
+            </div>
+            <div class="panel-body">
+                {{address.amount}}
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-heading c_deepPurpleG300to500">
+                <h3 class="panel-title">Blocks where address appears</h3>
+            </div>
+            <div class="panel-body" ng-repeat="block in address.blocks">
+                Block Height: {{block.height}}
+                <br>
+                Hash: {{block.Hash}}
+                <br>
+                {{block.datet}}
+                <br>
+                {{block.Size}}
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="panel">
+            <div class="panel-heading c_deepPurpleG300to500">
+                <h3 class="panel-title">Tx where address appears</h3>
+            </div>
+            <div class="panel-body">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>BlockHeight</th>
+                            <th>From</th>
+                            <th>To</th>
+                            <th>Amount</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="tx in address.txs">
+                            <td style="max-width:20px; overflow:hidden;">{{tx.blockheight}}</td>
+                            <td style="max-width:20px; overflow:hidden;">{{tx.from}}</td>
+                            <td style="max-width:20px; overflow:hidden;">{{tx.to}}</td>
+                            <td>{{tx.amount}}</td>
+                            <td><a ng-href="#!/tx/{{tx.id}}">View</a></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

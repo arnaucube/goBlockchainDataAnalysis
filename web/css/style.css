@@ -30,15 +30,23 @@
 
 
 /* sidebar */
-.o_sidebar a{
+
+.o_sidebar a {
     color: white;
     padding: 10px;
 }
-.o_sidebar a:hover{
+
+.o_sidebar a:hover {
     background: #9E9E9E!important;
     color: white;
 }
-.o_sidebarIcon{
+
+.o_sidebarIcon {
     font-size: 180%;
     margin-right: 10px;
+}
+
+.o_textRoundProgress {
+    margin-left: 30%;
+    margin-top: -15%;
 }

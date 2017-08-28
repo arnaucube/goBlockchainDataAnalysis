@@ -4,7 +4,7 @@
       <div class="panel-body">
         <h4>{{stats.realblockcount}}/{{stats.blockcount}} Blocks with content</h4>
         <div class="progress" style="margin:0;">
-          <div class="progress-bar c_blueGrey500" ng-style="blockProgress"></div>
+          <div class="progress-bar c_deepPurpleG300to500" ng-style="blockProgress"></div>
         </div>
       </div>
     </div>
@@ -14,7 +14,7 @@
       <div class="panel-body">
         <h4>{{stats.txcount}} Txs</h4>
         <div class="progress" style="margin:0;">
-          <div class="progress-bar c_blueGrey500" ng-style="txProgress"></div>
+          <div class="progress-bar c_deepPurpleG300to500" ng-style="txProgress"></div>
         </div>
       </div>
     </div>
@@ -24,7 +24,7 @@
       <div class="panel-body">
         <h4>{{stats.addrcount}} Addr</h4>
         <div class="progress" style="margin:0;">
-          <div class="progress-bar c_blueGrey500" ng-style="txProgress"></div>
+          <div class="progress-bar c_deepPurpleG300to500" ng-style="txProgress"></div>
         </div>
       </div>
     </div>
@@ -35,7 +35,7 @@
         <round-progress
         max="max"
         current="current"
-        color="#45CCCE"
+        color="#9575CD"
         bgcolor="#eaeaea"
         radius="100"
         stroke="20"
@@ -46,6 +46,7 @@
         duration="800"
         animation="easeInOutQuart"
         animation-delay="0">{{current}}/{{max}}</round-progress>
+          <div class="o_textRoundProgress">{{ current }}/{{ max }}</div>
       </div>
     </div>
   </div>
@@ -54,11 +55,11 @@
       <div class="panel-body">
         <round-progress
         max="max"
-        current="current"
-        color="#607D8B"
+        current="20"
+        color="#673AB7"
         bgcolor="#eaeaea"
         radius="100"
-        stroke="20"
+        stroke="25"
         semi="true"
         rounded="false"
         clockwise="true"
@@ -66,6 +67,7 @@
         duration="800"
         animation="easeInOutQuart"
         animation-delay="0">{{current}}/{{max}}</round-progress>
+          <div class="o_textRoundProgress">25%</div>
       </div>
     </div>
   </div>
@@ -73,9 +75,9 @@
 <div class="row">
   <div class="col-sm-4">
     <div class="panel">
-      <div class="panel-heading c_blueGrey300">
+      <div class="panel-heading c_deepPurpleG300to500">
         <h3 class="panel-title">Last 24 hours Tx/Hour
-                <a ng-href="#!/dateAnalysis" class="pull-right c_blueGrey300">View more</a></h3>
+                <a ng-href="#!/dateAnalysis" class="pull-right c_deepPurpleG300to500">View more</a></h3>
       </div>
       <div class="panel-body">
         <canvas id="line" class="chart chart-line" chart-data="last24hour.data" chart-labels="last24hour.labels">
@@ -84,7 +86,7 @@
     </div>
 
     <div class="panel">
-      <div class="panel-heading c_blueGrey300">
+      <div class="panel-heading c_deepPurpleG300to500">
         <h3 class="panel-title">Tx/Day Last 7 Days</h3>
       </div>
       <div class="panel-body">
@@ -95,9 +97,9 @@
   </div>
   <div class="col-sm-8">
     <div class="panel">
-      <div class="panel-heading c_blueGrey300">
+      <div class="panel-heading c_deepPurpleG300to500">
         <h3 class="panel-title">Last 7 days Tx/Hour
-                  <a ng-href="#!/dateAnalysis" class="pull-right c_blueGrey300">View more</a></h3>
+                 <a ng-href="#!/dateAnalysis" class="pull-right c_deepPurpleG300to500">View more</a></h3>
       </div>
       <div class="panel-body">
         <canvas id="line" class="chart chart-line" chart-data="last7dayhour.data" chart-labels="last7dayhour.labels" chart-series="last7dayhour.series">
@@ -109,13 +111,13 @@
 <div class="row">
   <div class="col-sm-4">
     <div class="panel">
-      <div class="panel-heading c_blueGrey300">
+      <div class="panel-heading c_deepPurpleG300to500">
         <h3 class="panel-title">Last addresses used</h3>
       </div>
       <div class="panel-body" style="max-height: 250px;overflow-y: scroll;">
         <div class="list-group-item" ng-repeat="address in addresses">
           <div class="row-content">
-            <p class="list-group-item-text">{{address.hash}}</p>
+            <a ng-href="#!/address/{{address.hash}}" class="list-group-item-text">{{address.hash}}</a>
           </div>
         </div>
       </div>
@@ -124,11 +126,11 @@
   </div>
   <div class="col-md-8">
     <div class="panel">
-      <div class="panel-heading c_blueGrey300">
+      <div class="panel-heading c_deepPurpleG300to500">
         <h3 class="panel-title">Last Tx with amount</h3>
       </div>
       <div class="panel-body" style="max-height: 250px;overflow-y: scroll;">
-        <table class="table table-striped table-hover">
+        <table class="table table-hover">
           <!--<colgroup>
                         <col class="col-md-2">
                         <col class="col-md-2">
