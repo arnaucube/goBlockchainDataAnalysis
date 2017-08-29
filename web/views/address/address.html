@@ -8,20 +8,29 @@
                 {{address.amount}}
             </div>
         </div>
+        <div class="panel">
+          <div class="panel-heading c_deepPurpleG300to500">
+            <h3 class="panel-title">Address uses
+          </div>
+          <div class="panel-body">
+            <canvas id="line" class="chart chart-line" chart-data="addresstimechart.data" chart-labels="addresstimechart.labels">
+            </canvas>
+          </div>
+        </div>
     </div>
     <div class="col-sm-8">
         <div class="panel">
             <div class="panel-heading c_deepPurpleG300to500">
                 <h3 class="panel-title">Blocks where address appears</h3>
             </div>
-            <div class="panel-body">
+            <div class="panel-body" style="max-height: 300px;overflow-y: scroll;">
                 <div class="list-group">
                     <a ng-href="#!/block/{{block.height}}" class="list-group-item-text" ng-repeat="block in address.blocks">
                         Block Height: {{block.height}}
                         <br> Hash: {{block.hash}}
                         <br> {{block.datet}}
                         <br> Size: {{block.size}} bytes
-                        <br>
+                        <hr>
                     </a>
                 </div>
             </div>
@@ -39,32 +48,36 @@
                 <table class="table table-hover">
                     <thead>
                         <tr>
-                            <th>BlockHeight</th>
-                            <th>From</th>
-                            <th>To</th>
-                            <th>Amount</th>
-                            <th></th>
+                            <th>Txid</th>
+                            <th>Input</th>
+                            <th>Output</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr ng-repeat="tx in address.txs">
                             <td style="max-width:20px; overflow:hidden;">
-                                <a ng-href="#!/block/{{tx.blockheight}}" class="list-group-item-text">
-                                    {{tx.blockheight}}
+                                <a ng-href="#!/tx/{{tx.txid}}" class="list-group-item-text">
+                                    {{tx.txid}}
                                 </a>
+                                <br>
+                                {{tx.datet}}
                             </td>
                             <td style="max-width:20px; overflow:hidden;">
-                                <a ng-href="#!/address/{{tx.from}}" class="list-group-item-text">
-                                    {{tx.from}}
-                                </a>
+                                <table><tbody><tr ng-repeat="vin in tx.vin"><td>
+                                    <a ng-href="#!/address/{{vin.address}}" class="list-group-item-text">
+                                        {{vin.address}}
+                                    </a>
+                                    :{{vin.amount}}
+                                </td></tr></tbody></table>
                             </td>
                             <td style="max-width:20px; overflow:hidden;">
-                                <a ng-href="#!/address/{{tx.to}}" class="list-group-item-text">
-                                    {{tx.to}}
-                                </a>
+                                <table><tbody><tr ng-repeat="vout in tx.vout"><td>
+                                    <a ng-href="#!/address/{{vout.address}}" class="list-group-item-text">
+                                        {{vout.address}}
+                                    </a>
+                                    :{{vout.value}}
+                                </td></tr></tbody></table>
                             </td>
-                            <td>{{tx.amount}}</td>
-                            <td><a ng-href="#!/tx/{{tx.id}}">View</a></td>
                         </tr>
                     </tbody>
                 </table>

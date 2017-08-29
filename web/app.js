@@ -12,6 +12,7 @@ angular.module('webApp', [
     'app.navbar',
     'app.main',
     'app.block',
+    'app.tx',
     'app.address',
     'app.network',
     'app.addressNetwork',

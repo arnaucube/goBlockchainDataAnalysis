@@ -107,6 +107,10 @@ type ChartAnalysisResp struct {
 	Labels []string `json:"labels"`
 	Data   []int    `json:"data"`
 }
+type ChartAnalysisRespFloat64 struct {
+	Labels []string  `json:"labels"`
+	Data   []float64 `json:"data"`
+}
 type ChartSeriesAnalysisResp struct {
 	Labels []string `json:"labels"`
 	Data   [][]int  `json:"data"`

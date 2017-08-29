@@ -8,6 +8,9 @@ import (
 	"gopkg.in/mgo.v2/bson"
 )
 
+func dateBeforeThan(dateA time.Time, dateB time.Time) bool {
+	return dateA.Before(dateB)
+}
 func map24hours() map[int]int {
 	h := make(map[int]int)
 	for i := 0; i < 24; i++ {

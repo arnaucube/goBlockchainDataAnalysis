@@ -53,6 +53,12 @@ var routes = Routes{
 		Block,
 	},
 	Route{
+		"Tx",
+		"GET",
+		"/tx/{txid}",
+		Tx,
+	},
+	Route{
 		"Address",
 		"GET",
 		"/address/{hash}",
@@ -99,6 +105,12 @@ var routes = Routes{
 		"Get",
 		"/last7dayhour",
 		GetLast7DayHourAnalysis,
+	},
+	Route{
+		"GetAddressTimeChart",
+		"GET",
+		"/addresstimechart/{hash}",
+		GetAddressTimeChart,
 	},
 }
 
@@ -190,16 +202,26 @@ func Block(w http.ResponseWriter, r *http.Request) {
 		err = txCollection.Find(bson.M{"blockheight": heightString}).All(&txs)
 		block.Txs = txs
 
-		/*for _, tx := range address.Txs {
-			blocks := []BlockModel{}
-			err = blockCollection.Find(bson.M{"blockheight": tx.BlockHash}).All(&blocks)
-			for _, block := range blocks {
-				address.Blocks = append(address.Blocks, block)
-			}
-		}*/
-
 		//convert []resp struct to json
 		jsonResp, err := json.Marshal(block)
+		check(err)
+
+		fmt.Fprintln(w, string(jsonResp))
+	}
+}
+func Tx(w http.ResponseWriter, r *http.Request) {
+	ipFilter(w, r)
+
+	vars := mux.Vars(r)
+	txid := vars["txid"]
+	if txid == "undefined" {
+		fmt.Fprintln(w, "not valid txid")
+	} else {
+		tx := TxModel{}
+		err := txCollection.Find(bson.M{"txid": txid}).One(&tx)
+
+		//convert []resp struct to json
+		jsonResp, err := json.Marshal(tx)
 		check(err)
 
 		fmt.Fprintln(w, string(jsonResp))
@@ -217,7 +239,7 @@ func Address(w http.ResponseWriter, r *http.Request) {
 		err := addressCollection.Find(bson.M{"hash": hash}).One(&address)
 
 		txs := []TxModel{}
-		err = txCollection.Find(bson.M{"$or": []bson.M{bson.M{"from": hash}, bson.M{"to": hash}}}).All(&txs)
+		err = txCollection.Find(bson.M{"$or": []bson.M{bson.M{"vin.address": hash}, bson.M{"vout.address": hash}}}).All(&txs)
 		address.Txs = txs
 
 		for _, tx := range address.Txs {
@@ -462,4 +484,57 @@ func GetLast7DayHourAnalysis(w http.ResponseWriter, r *http.Request) {
 	jsonResp, err := json.Marshal(resp)
 	check(err)
 	fmt.Fprintln(w, string(jsonResp))
+}
+func GetAddressTimeChart(w http.ResponseWriter, r *http.Request) {
+	ipFilter(w, r)
+
+	vars := mux.Vars(r)
+	hash := vars["hash"]
+	if hash == "undefined" {
+		fmt.Fprintln(w, "not valid hash")
+	} else {
+		address := AddressModel{}
+		err := addressCollection.Find(bson.M{"hash": hash}).One(&address)
+
+		txs := []TxModel{}
+		err = txCollection.Find(bson.M{"$or": []bson.M{bson.M{"vin.address": hash}, bson.M{"vout.address": hash}}}).All(&txs)
+		address.Txs = txs
+
+		for _, tx := range address.Txs {
+			blocks := []BlockModel{}
+			err = blockCollection.Find(bson.M{"hash": tx.BlockHash}).All(&blocks)
+			for _, block := range blocks {
+				address.Blocks = append(address.Blocks, block)
+			}
+		}
+
+		count := make(map[time.Time]float64)
+		for _, tx := range txs {
+			var val float64
+			for _, vin := range tx.Vin {
+				val = val + vin.Amount
+			}
+			count[tx.DateT] = val
+		}
+		var dateSorted []time.Time
+		for t, _ := range count {
+			dateSorted = append(dateSorted, t)
+		}
+		sort.Slice(dateSorted, func(i, j int) bool {
+			//return dateSorted[i] < dateSorted[j]
+			return dateBeforeThan(dateSorted[i], dateSorted[j])
+		})
+
+		var resp ChartAnalysisRespFloat64
+		for _, t := range dateSorted {
+			resp.Labels = append(resp.Labels, t.String())
+			resp.Data = append(resp.Data, count[t])
+		}
+
+		//convert []resp struct to json
+		jsonResp, err := json.Marshal(resp)
+		check(err)
+
+		fmt.Fprintln(w, string(jsonResp))
+	}
 }
