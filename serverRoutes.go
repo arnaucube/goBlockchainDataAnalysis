@@ -47,16 +47,22 @@ var routes = Routes{
 		GetLastTx,
 	},
 	Route{
-		"AddressNetwork",
+		"Block",
 		"GET",
-		"/address/network/{address}",
-		AddressNetwork,
+		"/block/{height}",
+		Block,
 	},
 	Route{
 		"Address",
 		"GET",
 		"/address/{hash}",
 		Address,
+	},
+	Route{
+		"AddressNetwork",
+		"GET",
+		"/address/network/{address}",
+		AddressNetwork,
 	},
 	Route{
 		"AddressSankey",
@@ -167,22 +173,36 @@ func GetLastTx(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Fprintln(w, string(jsonData))
 }
-func AddressNetwork(w http.ResponseWriter, r *http.Request) {
+func Block(w http.ResponseWriter, r *http.Request) {
 	ipFilter(w, r)
 
 	vars := mux.Vars(r)
-	address := vars["address"]
-	if address == "undefined" {
-		fmt.Fprintln(w, "not valid address")
+	var heightString string
+	heightString = vars["height"]
+	height, err := strconv.ParseInt(heightString, 10, 64)
+	if err != nil {
+		fmt.Fprintln(w, "not valid height")
 	} else {
-		network := addressTree(address)
-		network.Nodes[0].Shape = "triangle"
+		block := BlockModel{}
+		err := blockCollection.Find(bson.M{"height": height}).One(&block)
+
+		txs := []TxModel{}
+		err = txCollection.Find(bson.M{"blockheight": heightString}).All(&txs)
+		block.Txs = txs
+
+		/*for _, tx := range address.Txs {
+			blocks := []BlockModel{}
+			err = blockCollection.Find(bson.M{"blockheight": tx.BlockHash}).All(&blocks)
+			for _, block := range blocks {
+				address.Blocks = append(address.Blocks, block)
+			}
+		}*/
 
 		//convert []resp struct to json
-		jNetwork, err := json.Marshal(network)
+		jsonResp, err := json.Marshal(block)
 		check(err)
 
-		fmt.Fprintln(w, string(jNetwork))
+		fmt.Fprintln(w, string(jsonResp))
 	}
 }
 func Address(w http.ResponseWriter, r *http.Request) {
@@ -213,6 +233,24 @@ func Address(w http.ResponseWriter, r *http.Request) {
 		check(err)
 
 		fmt.Fprintln(w, string(jsonResp))
+	}
+}
+func AddressNetwork(w http.ResponseWriter, r *http.Request) {
+	ipFilter(w, r)
+
+	vars := mux.Vars(r)
+	address := vars["address"]
+	if address == "undefined" {
+		fmt.Fprintln(w, "not valid address")
+	} else {
+		network := addressTree(address)
+		network.Nodes[0].Shape = "triangle"
+
+		//convert []resp struct to json
+		jNetwork, err := json.Marshal(network)
+		check(err)
+
+		fmt.Fprintln(w, string(jNetwork))
 	}
 }
 func AddressSankey(w http.ResponseWriter, r *http.Request) {

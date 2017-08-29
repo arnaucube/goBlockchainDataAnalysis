@@ -8,23 +8,29 @@
                 {{address.amount}}
             </div>
         </div>
-
+    </div>
+    <div class="col-sm-8">
         <div class="panel">
             <div class="panel-heading c_deepPurpleG300to500">
                 <h3 class="panel-title">Blocks where address appears</h3>
             </div>
-            <div class="panel-body" ng-repeat="block in address.blocks">
-                Block Height: {{block.height}}
-                <br>
-                Hash: {{block.Hash}}
-                <br>
-                {{block.datet}}
-                <br>
-                {{block.Size}}
+            <div class="panel-body">
+                <div class="list-group">
+                    <a ng-href="#!/block/{{block.height}}" class="list-group-item-text" ng-repeat="block in address.blocks">
+                        Block Height: {{block.height}}
+                        <br> Hash: {{block.hash}}
+                        <br> {{block.datet}}
+                        <br> Size: {{block.size}} bytes
+                        <br>
+                    </a>
+                </div>
             </div>
         </div>
     </div>
-    <div class="col-sm-6">
+</div>
+
+<div class="row">
+    <div class="col-sm-12">
         <div class="panel">
             <div class="panel-heading c_deepPurpleG300to500">
                 <h3 class="panel-title">Tx where address appears</h3>
@@ -42,9 +48,21 @@
                     </thead>
                     <tbody>
                         <tr ng-repeat="tx in address.txs">
-                            <td style="max-width:20px; overflow:hidden;">{{tx.blockheight}}</td>
-                            <td style="max-width:20px; overflow:hidden;">{{tx.from}}</td>
-                            <td style="max-width:20px; overflow:hidden;">{{tx.to}}</td>
+                            <td style="max-width:20px; overflow:hidden;">
+                                <a ng-href="#!/block/{{tx.blockheight}}" class="list-group-item-text">
+                                    {{tx.blockheight}}
+                                </a>
+                            </td>
+                            <td style="max-width:20px; overflow:hidden;">
+                                <a ng-href="#!/address/{{tx.from}}" class="list-group-item-text">
+                                    {{tx.from}}
+                                </a>
+                            </td>
+                            <td style="max-width:20px; overflow:hidden;">
+                                <a ng-href="#!/address/{{tx.to}}" class="list-group-item-text">
+                                    {{tx.to}}
+                                </a>
+                            </td>
                             <td>{{tx.amount}}</td>
                             <td><a ng-href="#!/tx/{{tx.id}}">View</a></td>
                         </tr>

@@ -11,9 +11,10 @@ angular.module('webApp', [
     'angular-svg-round-progressbar',
     'app.navbar',
     'app.main',
+    'app.block',
+    'app.address',
     'app.network',
     'app.addressNetwork',
-    'app.address',
     'app.sankey',
     'app.dateAnalysis'
 ]).

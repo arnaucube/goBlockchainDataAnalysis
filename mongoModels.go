@@ -18,12 +18,24 @@ type DateModel struct {
 	BlockHash   string  `json:"blockhash"`
 	BlockHeight string  `json:"blockheight"`*/
 }
+type Vin struct {
+	Txid    string  `json:"txid"`
+	Vout    uint32  `json:"vout"`
+	Amount  float64 `json:"amount"`
+	Address string  `json:"address"`
+}
+type Vout struct {
+	Value   float64 `json:"value"`
+	Address string  `json:"address"`
+}
 type TxModel struct {
-	Hex         string    `json:"hex"`
-	Txid        string    `json:"txid"`
-	Hash        string    `json:"hash"`
-	From        string    `json:"from"` //hash of address
-	To          string    `json:"to"`   //hash of address
+	Hex  string `json:"hex"`
+	Txid string `json:"txid"`
+	Hash string `json:"hash"`
+	/*From        string    `json:"from"` //hash of address
+	To          string    `json:"to"`   //hash of address*/
+	Vin         []Vin     `json:"vin"`
+	Vout        []Vout    `json:"vout"`
 	Amount      float64   `json:"amount"`
 	BlockHash   string    `json:"blockhash"`
 	BlockHeight string    `json:"blockheight"`
@@ -39,6 +51,7 @@ type BlockModel struct {
 	//Amount        float64  `json:"amount"`
 	//Fee           float64  `json:"fee"`
 	Tx           []string  `json:"txid"` //txid of the TxModel
+	Txs          []TxModel `json:"txs"`
 	PreviousHash string    `json:"previoushash"`
 	NextHash     string    `json:"nexthash"`
 	Time         int64     `json:"time"`

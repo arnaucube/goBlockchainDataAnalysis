@@ -79,6 +79,17 @@ func explore(client *rpcclient.Client, blockHash string) {
 					nodeTx.Type = "tx"
 					saveNode(nodeCollection, nodeTx)
 
+					//Tx save
+					var newTx TxModel
+					newTx.Hex = blockTx.Hex
+					newTx.Txid = blockTx.Txid
+					newTx.Hash = blockTx.Hash
+					newTx.BlockHash = block.Hash
+					newTx.BlockHeight = strconv.FormatInt(block.Height, 10)
+					newTx.Time = blockTx.Time
+					newTx.DateT = unixTimeToTime(block.Time)
+					newTx.Date.Year, newTx.Date.Month, newTx.Date.Day, newTx.Date.Hour = decomposeDate(block.Time)
+
 					var originAddresses []string
 					var outputAddresses []string
 					var outputAmount []float64
@@ -101,6 +112,11 @@ func explore(client *rpcclient.Client, blockHash string) {
 							addr.Hash = outputAddr
 							addr.InBittrex = false
 							saveAddress(addr)
+
+							var newVout Vout
+							newVout.Value = Vo.Value
+							newVout.Address = outputAddr
+							newTx.Vout = append(newTx.Vout, newVout)
 						}
 					}
 					for _, Vi := range blockTx.Vin {
@@ -108,24 +124,20 @@ func explore(client *rpcclient.Client, blockHash string) {
 						check(err)
 						txVi, err := client.GetRawTransactionVerbose(th)
 						check(err)
+
 						if len(txVi.Vout[Vi.Vout].ScriptPubKey.Addresses) > 0 {
 							//add tx to newBlock
 							newBlock.Tx = append(newBlock.Tx, blockTx.Txid)
 
 							//Tx save
-							var newTx TxModel
-							newTx.Hex = blockTx.Hex
-							newTx.Txid = blockTx.Txid
-							newTx.Hash = blockTx.Hash
-							newTx.BlockHash = block.Hash
-							newTx.BlockHeight = strconv.FormatInt(block.Height, 10)
-							newTx.Time = blockTx.Time
-							newTx.DateT = unixTimeToTime(block.Time)
-							newTx.Date.Year, newTx.Date.Month, newTx.Date.Day, newTx.Date.Hour = decomposeDate(block.Time)
 							for _, originAddr := range txVi.Vout[Vi.Vout].ScriptPubKey.Addresses {
 								originAddresses = append(originAddresses, originAddr)
 
-								newTx.From = originAddr
+								var newVin Vin
+								newVin.Txid = blockTx.Txid
+								newVin.Amount = txVi.Vout[Vi.Vout].Value
+								newVin.Address = originAddr
+								newTx.Vin = append(newTx.Vin, newVin)
 
 								var n1 NodeModel
 								n1.Id = originAddr
@@ -167,11 +179,10 @@ func explore(client *rpcclient.Client, blockHash string) {
 									//hour analysis
 									hourAnalysis(eIn, blockTx.Time)
 
-									newTx.To = outputAddr
+									//newTx.To = outputAddr
 
 								}
 							}
-							//ERROR! need to make array with all Vin and array with Vout, with addresses and amount values
 							saveTx(newTx)
 						} else {
 							originAddresses = append(originAddresses, "origin")

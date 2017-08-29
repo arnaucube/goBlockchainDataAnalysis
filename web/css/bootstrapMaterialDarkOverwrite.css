@@ -21,8 +21,14 @@ body {
 .list-group-item:hover {
     background: rgba(255, 255, 255, 0.2)!important;
 }
-.list-group-item p, a{
+.list-group-item p {
     color: #ffffff!important;
+}
+.list-group-item a {
+    color: #512DA8!important;
+}
+.list-group-item-text {
+    color: #9575CD!important;
 }
 .table-hover  tbody  tr:hover {
   background-color: rgba(245, 245, 245, 0.2)!important;
