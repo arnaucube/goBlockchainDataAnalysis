@@ -71,6 +71,18 @@ var routes = Routes{
 		AddressNetwork,
 	},
 	Route{
+		"BlockSankey",
+		"GET",
+		"/block/{height}/sankey",
+		BlockSankey,
+	},
+	Route{
+		"TxSankey",
+		"GET",
+		"/tx/{txid}/sankey",
+		TxSankey,
+	},
+	Route{
 		"AddressSankey",
 		"GET",
 		"/address/sankey/{address}",
@@ -273,6 +285,139 @@ func AddressNetwork(w http.ResponseWriter, r *http.Request) {
 		check(err)
 
 		fmt.Fprintln(w, string(jNetwork))
+	}
+}
+func BlockSankey(w http.ResponseWriter, r *http.Request) {
+	ipFilter(w, r)
+	vars := mux.Vars(r)
+	var heightString string
+	heightString = vars["height"]
+	height, err := strconv.ParseInt(heightString, 10, 64)
+	if err != nil {
+		fmt.Fprintln(w, "not valid height")
+	} else {
+		block := BlockModel{}
+		err := blockCollection.Find(bson.M{"height": height}).One(&block)
+
+		txs := []TxModel{}
+		err = txCollection.Find(bson.M{"blockheight": heightString}).All(&txs)
+		block.Txs = txs
+
+		var nodesCount int
+		mapNodeK := make(map[string]int)
+		var sankey SankeyModel
+		for _, tx := range block.Txs {
+			var sankeyNodeA SankeyNodeModel
+			sankeyNodeA.Node = nodesCount
+			mapNodeK["tx"] = nodesCount
+			nodesCount++
+			sankeyNodeA.Name = "tx"
+			sankey.Nodes = append(sankey.Nodes, sankeyNodeA)
+
+			for _, vin := range tx.Vin {
+				var sankeyNode SankeyNodeModel
+				sankeyNode.Node = nodesCount
+				mapNodeK[vin.Address] = nodesCount
+				nodesCount++
+				sankeyNode.Name = vin.Address
+				sankey.Nodes = append(sankey.Nodes, sankeyNode)
+
+				var sankeyLink SankeyLinkModel
+				sankeyLink.Source = mapNodeK[vin.Address]
+				sankeyLink.Target = mapNodeK["tx"]
+				sankeyLink.Value = vin.Amount
+				fmt.Println(sankeyLink)
+				sankey.Links = append(sankey.Links, sankeyLink)
+				fmt.Println(sankey.Links)
+			}
+
+			for _, vout := range tx.Vout {
+				var sankeyNode SankeyNodeModel
+				sankeyNode.Node = nodesCount
+				mapNodeK[vout.Address] = nodesCount
+				nodesCount++
+				sankeyNode.Name = vout.Address
+				sankey.Nodes = append(sankey.Nodes, sankeyNode)
+
+				var sankeyLink SankeyLinkModel
+				sankeyLink.Source = mapNodeK["tx"]
+				sankeyLink.Target = mapNodeK[vout.Address]
+				sankeyLink.Value = vout.Value
+				fmt.Println(sankeyLink)
+				sankey.Links = append(sankey.Links, sankeyLink)
+			}
+
+		}
+
+		fmt.Println("Sankey generated")
+		fmt.Println(sankey)
+
+		//convert []resp struct to json
+		jsonSankey, err := json.Marshal(sankey)
+		check(err)
+
+		fmt.Fprintln(w, string(jsonSankey))
+	}
+}
+func TxSankey(w http.ResponseWriter, r *http.Request) {
+	ipFilter(w, r)
+	vars := mux.Vars(r)
+	txid := vars["txid"]
+	if txid == "undefined" {
+		fmt.Fprintln(w, "not valid height")
+	} else {
+
+		tx := TxModel{}
+		err := txCollection.Find(bson.M{"txid": txid}).One(&tx)
+
+		var nodesCount int
+		mapNodeK := make(map[string]int)
+		var sankey SankeyModel
+		var sankeyNodeA SankeyNodeModel
+		sankeyNodeA.Node = nodesCount
+		mapNodeK["tx"] = nodesCount
+		nodesCount++
+		sankeyNodeA.Name = "tx"
+		sankey.Nodes = append(sankey.Nodes, sankeyNodeA)
+
+		fmt.Println(tx.Vin)
+		for _, vin := range tx.Vin {
+			var sankeyNode SankeyNodeModel
+			sankeyNode.Node = nodesCount
+			mapNodeK[vin.Address] = nodesCount
+			nodesCount++
+			sankeyNode.Name = vin.Address
+			sankey.Nodes = append(sankey.Nodes, sankeyNode)
+
+			var sankeyLink SankeyLinkModel
+			sankeyLink.Source = mapNodeK[vin.Address]
+			sankeyLink.Target = mapNodeK["tx"]
+			sankeyLink.Value = vin.Amount
+			sankey.Links = append(sankey.Links, sankeyLink)
+		}
+
+		for _, vout := range tx.Vout {
+			var sankeyNode SankeyNodeModel
+			sankeyNode.Node = nodesCount
+			mapNodeK[vout.Address] = nodesCount
+			nodesCount++
+			sankeyNode.Name = vout.Address
+			sankey.Nodes = append(sankey.Nodes, sankeyNode)
+
+			var sankeyLink SankeyLinkModel
+			sankeyLink.Source = mapNodeK["tx"]
+			sankeyLink.Target = mapNodeK[vout.Address]
+			sankeyLink.Value = vout.Value
+			sankey.Links = append(sankey.Links, sankeyLink)
+		}
+
+		fmt.Println("Sankey generated")
+
+		//convert []resp struct to json
+		jsonSankey, err := json.Marshal(sankey)
+		check(err)
+
+		fmt.Fprintln(w, string(jsonSankey))
 	}
 }
 func AddressSankey(w http.ResponseWriter, r *http.Request) {
