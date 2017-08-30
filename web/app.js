@@ -17,7 +17,11 @@ angular.module('webApp', [
     'app.network',
     'app.addressNetwork',
     'app.sankey',
-    'app.dateAnalysis'
+    'app.dateAnalysis',
+    'app.blocks',
+    'app.txs',
+    'app.addresses',
+    'app.beta'
 ]).
 config(['$locationProvider', '$routeProvider', function($locationProvider, $routeProvider) {
         $locationProvider.hashPrefix('!');

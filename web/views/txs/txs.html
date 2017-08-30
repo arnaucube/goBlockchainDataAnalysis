@@ -1,0 +1,51 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="panel">
+      <div class="panel-heading c_deepPurpleG300to500">
+        <h3 class="panel-title">Last Tx with amount</h3>
+      </div>
+      <div class="panel-body">
+          <table class="table table-hover">
+              <thead>
+                  <tr>
+                      <th>BlockHeight</th>
+                      <th>Txid</th>
+                      <th>Input</th>
+                      <th>Output</th>
+                  </tr>
+              </thead>
+              <tbody>
+                  <tr ng-repeat="tx in txs">
+                      <td style="max-width:20px; overflow:hidden;">
+                          <a ng-href="#!/block/{{tx.blockheight}}" class="list-group-item-text">
+                              {{tx.blockheight}}
+                          </a>
+                      </td>
+                      <td style="max-width:20px; overflow:hidden;">
+                          <a ng-href="#!/address/{{tx.from}}" class="list-group-item-text">
+                              {{tx.txid}}
+                          </a>
+                      </td>
+                      <td style="max-width:20px; overflow:hidden;">
+                          <table><tbody><tr ng-repeat="vin in tx.vin"><td>
+                              <a ng-href="#!/address/{{vin.address}}" class="list-group-item-text">
+                                  {{vin.address}}
+                              </a>
+                              :{{vin.amount}}
+                          </td></tr></tbody></table>
+                      </td>
+                      <td style="max-width:20px; overflow:hidden;">
+                          <table><tbody><tr ng-repeat="vout in tx.vout"><td>
+                              <a ng-href="#!/address/{{vout.address}}" class="list-group-item-text">
+                                  {{vout.address}}
+                              </a>
+                              :{{vout.value}}
+                          </td></tr></tbody></table>
+                      </td>
+                  </tr>
+              </tbody>
+          </table>
+      </div>
+    </div>
+  </div>
+</div>

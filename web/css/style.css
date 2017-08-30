@@ -32,7 +32,7 @@
 /* sidebar */
 
 .o_sidebar a {
-    color: white;
+    color: white!important;
     padding: 10px;
 }
 

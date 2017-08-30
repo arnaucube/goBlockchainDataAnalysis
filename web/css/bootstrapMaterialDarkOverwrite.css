@@ -4,6 +4,9 @@
 body {
     background: #424242!important;
 }
+a {
+    color: #9575CD!important;
+}
 .panel-heading {
     border-radius: 0px!important;
 }
@@ -25,7 +28,7 @@ body {
     color: #ffffff!important;
 }
 .list-group-item a {
-    color: #512DA8!important;
+    color: #9575CD!important;
 }
 .list-group-item-text {
     color: #9575CD!important;
