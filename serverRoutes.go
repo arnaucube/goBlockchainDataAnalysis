@@ -35,16 +35,22 @@ var routes = Routes{
 		AllAddresses,
 	},
 	Route{
-		"GetLastAddr",
+		"Blocks",
 		"Get",
-		"/lastaddr",
-		GetLastAddr,
+		"/blocks/{page}/{count}",
+		Blocks,
 	},
 	Route{
-		"GetLastTx",
+		"Txs",
 		"Get",
-		"/lasttx",
-		GetLastTx,
+		"/txs/{page}/{count}",
+		Txs,
+	},
+	Route{
+		"Addresses",
+		"Get",
+		"/addresses/{page}/{count}",
+		Addresses,
 	},
 	Route{
 		"Block",
@@ -171,24 +177,42 @@ func AllAddresses(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Fprintln(w, string(jsonNodes))
 }
-func GetLastAddr(w http.ResponseWriter, r *http.Request) {
+func Blocks(w http.ResponseWriter, r *http.Request) {
 	ipFilter(w, r)
-
-	addresses := []AddressModel{}
-	err := addressCollection.Find(bson.M{}).Limit(10).Sort("-$natural").All(&addresses)
+	vars := mux.Vars(r)
+	page, err := strconv.Atoi(vars["page"])
 	check(err)
+	count, err := strconv.Atoi(vars["count"])
+	check(err)
+
+	blocks := []BlockModel{}
+	err = blockCollection.Find(bson.M{}).Skip((page - 1) * 20).Limit(count).Sort("-$natural").All(&blocks)
+	check(err)
+
+	for _, block := range blocks {
+		//blockheight := strconv.FormatInt(block.Height, 10)
+		blockheight := block.Height
+		txs := []TxModel{}
+		err = txCollection.Find(bson.M{"blockheight": blockheight}).All(&txs)
+		block.Txs = txs
+	}
 
 	//convert []resp struct to json
-	jsonResp, err := json.Marshal(addresses)
+	jsonData, err := json.Marshal(blocks)
 	check(err)
 
-	fmt.Fprintln(w, string(jsonResp))
+	fmt.Fprintln(w, string(jsonData))
 }
-func GetLastTx(w http.ResponseWriter, r *http.Request) {
+func Txs(w http.ResponseWriter, r *http.Request) {
 	ipFilter(w, r)
+	vars := mux.Vars(r)
+	page, err := strconv.Atoi(vars["page"])
+	check(err)
+	count, err := strconv.Atoi(vars["count"])
+	check(err)
 
 	txs := []TxModel{}
-	err := txCollection.Find(bson.M{}).Limit(10).Sort("-$natural").All(&txs)
+	err = txCollection.Find(bson.M{}).Skip((page - 1) * 20).Limit(count).Sort("-$natural").All(&txs)
 	check(err)
 
 	//convert []resp struct to json
@@ -196,6 +220,24 @@ func GetLastTx(w http.ResponseWriter, r *http.Request) {
 	check(err)
 
 	fmt.Fprintln(w, string(jsonData))
+}
+func Addresses(w http.ResponseWriter, r *http.Request) {
+	ipFilter(w, r)
+	vars := mux.Vars(r)
+	page, err := strconv.Atoi(vars["page"])
+	check(err)
+	count, err := strconv.Atoi(vars["count"])
+	check(err)
+
+	addresses := []AddressModel{}
+	err = addressCollection.Find(bson.M{}).Skip((page - 1) * 20).Limit(count).Sort("-$natural").All(&addresses)
+	check(err)
+
+	//convert []resp struct to json
+	jsonResp, err := json.Marshal(addresses)
+	check(err)
+
+	fmt.Fprintln(w, string(jsonResp))
 }
 func Block(w http.ResponseWriter, r *http.Request) {
 	ipFilter(w, r)

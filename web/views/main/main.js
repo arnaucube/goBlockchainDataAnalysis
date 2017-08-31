@@ -32,7 +32,7 @@ angular.module('app.main', ['ngRoute'])
 
         //last addr
         $scope.addresses = [];
-        $http.get(urlapi + 'lastaddr')
+        $http.get(urlapi + 'addresses/1/10')
             .then(function(data, status, headers, config) {
                 console.log(data);
                 $scope.addresses = data.data;
@@ -42,7 +42,7 @@ angular.module('app.main', ['ngRoute'])
 
         //last tx
         $scope.txs = [];
-        $http.get(urlapi + 'lasttx')
+        $http.get(urlapi + 'txs/1/10')
             .then(function(data, status, headers, config) {
                 console.log(data);
                 $scope.txs = data.data;
