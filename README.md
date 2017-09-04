@@ -102,19 +102,10 @@ Webapp will run on 127.0.0.1:8080
 ### Some screenshots
 Some screenshots can be old, and can contain errors.
 
-![goBlockchainDataAnalysis](https://raw.githubusercontent.com/arnaucode/goBlockchainDataAnalysis/master/screenshots/goBlockchainDataAnalysis00_new.png "goBlockchainDataAnalysis")
-
 ![goBlockchainDataAnalysis](https://raw.githubusercontent.com/arnaucode/goBlockchainDataAnalysis/master/screenshots/goBlockchainDataAnalysis00.png "goBlockchainDataAnalysis")
-
-![goBlockchainDataAnalysis](https://raw.githubusercontent.com/arnaucode/goBlockchainDataAnalysis/master/screenshots/goBlockchainDataAnalysis06.gif "goBlockchainDataAnalysis")
-
-![goBlockchainDataAnalysis](https://raw.githubusercontent.com/arnaucode/goBlockchainDataAnalysis/master/screenshots/goBlockchainDataAnalysis05.png "goBlockchainDataAnalysis")
-
 
 ![goBlockchainDataAnalysis](https://raw.githubusercontent.com/arnaucode/goBlockchainDataAnalysis/master/screenshots/goBlockchainDataAnalysis01.png "goBlockchainDataAnalysis")
 
-
 ![goBlockchainDataAnalysis](https://raw.githubusercontent.com/arnaucode/goBlockchainDataAnalysis/master/screenshots/goBlockchainDataAnalysis02.png "goBlockchainDataAnalysis")
 
-
-![goBlockchainDataAnalysis](https://raw.githubusercontent.com/arnaucode/goBlockchainDataAnalysis/master/screenshots/goBlockchainDataAnalysis04.png "goBlockchainDataAnalysis")
+![goBlockchainDataAnalysis](https://raw.githubusercontent.com/arnaucode/goBlockchainDataAnalysis/master/screenshots/goBlockchainDataAnalysis03.gif "goBlockchainDataAnalysis")

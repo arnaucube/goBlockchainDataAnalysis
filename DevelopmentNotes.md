@@ -31,9 +31,6 @@ other
 
 - num address evolution throught time
 
-- fix error in exploreBlockchain.go, when getting the tx.Vin
-tx 8f04960da36beaa928b9693f7dca4afae5a6122bb6874d409a1156e4c6c55024 has 4 vin, but exploreBlockchain is only getting the first
-
 - pagination in address network generation
 
 - stop rendering dots of sankey, when view change
