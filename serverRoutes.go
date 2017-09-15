@@ -125,6 +125,12 @@ var routes = Routes{
 		GetLast7DayHourAnalysis,
 	},
 	Route{
+		"GetLastMonthsAnalysis",
+		"Get",
+		"/lastmonths/{count}",
+		GetLastMonthsAnalysis,
+	},
+	Route{
 		"GetAddressTimeChart",
 		"GET",
 		"/addresstimechart/{hash}",
@@ -666,6 +672,50 @@ func GetLast7DayHourAnalysis(w http.ResponseWriter, r *http.Request) {
 	}
 	hourLabels := []string{"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23"}
 	resp.Labels = hourLabels
+
+	//convert []resp struct to json
+	jsonResp, err := json.Marshal(resp)
+	check(err)
+	fmt.Fprintln(w, string(jsonResp))
+}
+func GetLastMonthsAnalysis(w http.ResponseWriter, r *http.Request) {
+	ipFilter(w, r)
+	vars := mux.Vars(r)
+	count, err := strconv.Atoi(vars["count"])
+	check(err)
+	fmt.Println(count)
+	fromDate := time.Now().AddDate(0, -count, 0)
+	toDate := time.Now()
+
+	txs := []TxModel{}
+	err = txCollection.Find(bson.M{
+		"datet": bson.M{
+			"$gt": fromDate,
+			"$lt": toDate,
+		},
+	}).Sort("-$natural").All(&txs)
+	check(err)
+
+	//generate map with 24 hours
+	//hourFrequencies := map24hours()
+	dayFrequencies := make(map[float64]int)
+	for _, tx := range txs {
+		dayFrequencies[float64(tx.Date.Month) + float64(tx.Date.Day)/100]++
+	}
+	var dayCount []ChartCountFloat64Model
+	for day, frequency := range dayFrequencies {
+		dayCount = append(dayCount, ChartCountFloat64Model{day, frequency})
+	}
+	//sort by hour
+	sort.Slice(dayCount, func(i, j int) bool {
+		return dayCount[i].Elem < dayCount[j].Elem
+	})
+
+	var resp ChartAnalysisResp
+	for _, d := range dayCount {
+		resp.Labels = append(resp.Labels, strconv.FormatFloat(d.Elem, 'f', -1, 64))
+		resp.Data = append(resp.Data, d.Count)
+	}
 
 	//convert []resp struct to json
 	jsonResp, err := json.Marshal(resp)

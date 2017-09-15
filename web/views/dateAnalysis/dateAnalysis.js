@@ -57,4 +57,20 @@ angular.module('app.dateAnalysis', ['ngRoute', 'chart.js'])
             }, function(data, status, headers, config) {
                 console.log('data error');
             });
+
+            $scope.lastmonths={
+                data: [],
+                labels: []
+            };
+            $scope.monthsCount = 3;
+            $http.get(urlapi + 'lastmonths/' + $scope.monthsCount)
+                .then(function(data, status, headers, config) {
+                    console.log('data success');
+                    console.log(data);
+
+                    $scope.lastmonths.data = data.data.data;
+                    $scope.lastmonths.labels=data.data.labels;
+                }, function(data, status, headers, config) {
+                    console.log('data error');
+                });
     });

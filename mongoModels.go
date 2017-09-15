@@ -98,7 +98,10 @@ type SankeyModel struct {
 	Nodes []SankeyNodeModel `json:"nodes"`
 	Links []SankeyLinkModel `json:"links"`
 }
-
+type ChartCountFloat64Model struct {
+	Elem  float64 `json:"elem"`
+	Count int `json:"count"`
+}
 type ChartCountModel struct {
 	Elem  int `json:"elem"`
 	Count int `json:"count"`
