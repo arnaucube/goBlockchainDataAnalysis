@@ -125,70 +125,70 @@ func explore(client *rpcclient.Client, blockHash string) {
 						txVi, err := client.GetRawTransactionVerbose(th)
 						check(err)
 
-						if len(txVi.Vout[Vi.Vout].ScriptPubKey.Addresses) > 0 {
-							//add tx to newBlock
-							newBlock.Tx = append(newBlock.Tx, blockTx.Txid)
+						//if len(txVi.Vout[Vi.Vout].ScriptPubKey.Addresses) > 0 {
+						//add tx to newBlock
+						newBlock.Tx = append(newBlock.Tx, blockTx.Txid)
 
-							//Tx save
-							for _, originAddr := range txVi.Vout[Vi.Vout].ScriptPubKey.Addresses {
-								originAddresses = append(originAddresses, originAddr)
+						//Tx save
+						for _, originAddr := range txVi.Vout[Vi.Vout].ScriptPubKey.Addresses {
+							originAddresses = append(originAddresses, originAddr)
 
-								var newVin Vin
-								newVin.Txid = blockTx.Txid
-								newVin.Amount = txVi.Vout[Vi.Vout].Value
-								newVin.Address = originAddr
-								newTx.Vin = append(newTx.Vin, newVin)
+							var newVin Vin
+							newVin.Txid = blockTx.Txid
+							newVin.Amount = txVi.Vout[Vi.Vout].Value
+							newVin.Address = originAddr
+							newTx.Vin = append(newTx.Vin, newVin)
 
-								var n1 NodeModel
-								n1.Id = originAddr
-								n1.Label = originAddr
-								n1.Title = originAddr
-								n1.Group = strconv.FormatInt(block.Height, 10)
-								n1.Value = 1
-								n1.Shape = "dot"
-								n1.Type = "address"
-								saveNode(nodeCollection, n1)
+							var n1 NodeModel
+							n1.Id = originAddr
+							n1.Label = originAddr
+							n1.Title = originAddr
+							n1.Group = strconv.FormatInt(block.Height, 10)
+							n1.Value = 1
+							n1.Shape = "dot"
+							n1.Type = "address"
+							saveNode(nodeCollection, n1)
 
-								//Address
-								var addr AddressModel
-								addr.Hash = originAddr
-								addr.InBittrex = false
-								saveAddress(addr)
+							//Address
+							var addr AddressModel
+							addr.Hash = originAddr
+							addr.InBittrex = false
+							saveAddress(addr)
 
-								for k, outputAddr := range outputAddresses {
-									var eIn EdgeModel
-									eIn.From = originAddr
-									eIn.To = txHash
-									eIn.Label = txVi.Vout[Vi.Vout].Value
-									eIn.Txid = blockTx.Txid
-									eIn.Arrows = "to"
-									eIn.BlockHeight = block.Height
-									saveEdge(edgeCollection, eIn)
+							for k, outputAddr := range outputAddresses {
+								var eIn EdgeModel
+								eIn.From = originAddr
+								eIn.To = txHash
+								eIn.Label = txVi.Vout[Vi.Vout].Value
+								eIn.Txid = blockTx.Txid
+								eIn.Arrows = "to"
+								eIn.BlockHeight = block.Height
+								saveEdge(edgeCollection, eIn)
 
-									var eOut EdgeModel
-									eOut.From = txHash
-									eOut.To = outputAddr
-									eOut.Label = outputAmount[k]
-									eOut.Txid = blockTx.Txid
-									eOut.Arrows = "to"
-									eOut.BlockHeight = block.Height
-									saveEdge(edgeCollection, eOut)
+								var eOut EdgeModel
+								eOut.From = txHash
+								eOut.To = outputAddr
+								eOut.Label = outputAmount[k]
+								eOut.Txid = blockTx.Txid
+								eOut.Arrows = "to"
+								eOut.BlockHeight = block.Height
+								saveEdge(edgeCollection, eOut)
 
-									//date analysis
-									//dateAnalysis(e, tx.Time)
-									//hour analysis
-									hourAnalysis(eIn, blockTx.Time)
+								//date analysis
+								//dateAnalysis(e, tx.Time)
+								//hour analysis
+								hourAnalysis(eIn, blockTx.Time)
 
-									//newTx.To = outputAddr
+								//newTx.To = outputAddr
 
-								}
 							}
-							saveTx(newTx)
-						} else {
-							originAddresses = append(originAddresses, "origin")
 						}
+						/*} else {
+							originAddresses = append(originAddresses, "origin")
+						}*/
 
 					}
+					saveTx(newTx)
 					fmt.Print("originAddresses: ")
 					fmt.Println(len(originAddresses))
 					fmt.Print("outputAddresses: ")
